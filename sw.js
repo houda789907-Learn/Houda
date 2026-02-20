@@ -1,4 +1,4 @@
-const cacheName = 'houda-app-v1';
+const cacheName = 'Azqary-app-v1';
 const assets = [
   './',
   './index.html',
