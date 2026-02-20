@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الورد اليومي - الجزء الأول</title>
+    <title>الأذكار - ميزان الحسنات</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -12,100 +12,121 @@
         body { 
             background-color: var(--black); 
             color: var(--gold); 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: 'Segoe UI', sans-serif; 
             text-align: center; 
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        
-        .content {
-            margin-top: 50px;
+            margin: 0; padding: 20px;
         }
 
-        h1 { 
-            font-size: 2rem; 
-            border-bottom: 2px solid var(--gold); 
-            display: inline-block; 
-            padding-bottom: 10px;
-            margin-bottom: 30px;
-        }
-
-        .ward-box {
-            border: 1px solid var(--gold);
-            padding: 40px 20px;
+        /* مربع الحسنات العلوي */
+        .rewards-container {
+            border: 2px solid var(--gold);
+            padding: 15px;
+            max-width: 200px;
+            margin: 0 auto 30px;
             border-radius: 15px;
-            background: rgba(212, 175, 55, 0.05);
-            max-width: 400px;
-            margin: 0 auto;
+            background: rgba(212, 175, 55, 0.1);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
         }
-
-        .ward-number {
-            font-size: 3rem;
+        #total-rewards {
+            font-size: 2rem;
             display: block;
-            margin-bottom: 10px;
             font-weight: bold;
         }
+        .rewards-label { font-size: 0.9rem; opacity: 0.8; }
 
-        .ward-text {
-            font-size: 1.5rem;
+        /* صناديق الأذكار */
+        .zekr-box {
+            border: 1px solid var(--gold);
+            margin: 15px auto;
+            padding: 20px;
+            max-width: 400px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            background: #111;
+            user-select: none; /* لمنع تحديد النص عند الضغط السريع */
+        }
+        .zekr-box:active { transform: scale(0.95); background: #1a1a1a; }
+        
+        .zekr-text { font-size: 1.4rem; margin-bottom: 10px; display: block; }
+        .counter-badge {
+            background: var(--gold);
+            color: var(--black);
+            padding: 2px 15px;
+            border-radius: 20px;
+            font-weight: bold;
         }
 
         .back-btn { 
-            display: inline-block; 
-            margin-top: 30px; 
-            color: var(--black); 
-            background: var(--gold); 
-            padding: 10px 30px; 
-            text-decoration: none; 
-            border-radius: 50px; 
-            font-weight: bold; 
-            transition: 0.3s;
+            display: inline-block; margin-top: 30px; 
+            color: var(--black); background: var(--gold); 
+            padding: 10px 30px; text-decoration: none; 
+            border-radius: 50px; font-weight: bold; 
         }
 
-        .back-btn:hover {
-            transform: scale(1.1);
-        }
-
-        footer {
-            margin-bottom: 10px;
-        }
-
-        .ceo-text {
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            opacity: 0.7;
-        }
-
-        .name-text {
-            font-size: 1.2rem;
-            font-family: 'Times New Roman', serif;
-            font-weight: bold;
-            display: block;
-        }
+        footer { margin-top: 50px; opacity: 0.7; }
+        .name-text { font-weight: bold; font-size: 1.1rem; font-family: 'Times New Roman', serif; }
     </style>
 </head>
 <body>
 
-    <div class="content">
-        <h1>الورد اليومي</h1>
-        
-        <div class="ward-box">
-            <span class="ward-number">١</span>
-            <span class="ward-text">الجزء الأول</span>
-        </div>
-
-        <a href="index.html" class="back-btn">العودة للرئيسية</a>
+    <div class="rewards-container">
+        <span class="rewards-label">رصيد الحسنات</span>
+        <span id="total-rewards">0</span>
     </div>
 
+    <h1>أذكار المسلم</h1>
+    
+    <div class="zekr-box" onclick="doZekr(this)">
+        <span class="zekr-text">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</span>
+        <span class="counter-badge">0</span>
+    </div>
+
+    <div class="zekr-box" onclick="doZekr(this)">
+        <span class="zekr-text">أستغفر الله وأتوب إليه</span>
+        <span class="counter-badge">0</span>
+    </div>
+
+    <div class="zekr-box" onclick="doZekr(this)">
+        <span class="zekr-text">لا إله إلا الله</span>
+        <span class="counter-badge">0</span>
+    </div>
+
+    <a href="index.html" class="back-btn">العودة للرئيسية</a>
+
     <footer>
-        <div class="ceo-text">CEO-Co-Founder</div>
+        <div style="font-size: 0.7rem; letter-spacing: 2px;">CEO-Co-Founder</div>
         <div class="name-text">Houda</div>
     </footer>
 
+    <script>
+        let totalHasanat = 0;
+
+        function doZekr(element) {
+            // 1. تحديث عداد الذكر نفسه
+            let badge = element.querySelector('.counter-badge');
+            let currentCount = parseInt(badge.innerText);
+            currentCount++;
+            badge.innerText = currentCount;
+
+            // 2. التحقق إذا أكمل 10 تسبيحات
+            if (currentCount % 10 === 0) {
+                updateHasanat(10);
+                // إضافة تأثير بصري بسيط عند الربح
+                element.style.borderColor = "#fff";
+                setTimeout(() => { element.style.borderColor = "#d4af37"; }, 300);
+            }
+        }
+
+        function updateHasanat(amount) {
+            totalHasanat += amount;
+            document.getElementById('total-rewards').innerText = totalHasanat;
+            
+            // تأثير نبض لمربع الحسنات
+            let box = document.querySelector('.rewards-container');
+            box.style.transform = "scale(1.1)";
+            setTimeout(() => { box.style.transform = "scale(1)"; }, 200);
+        }
+    </script>
 </body>
 </html>
