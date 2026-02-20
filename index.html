@@ -3,177 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رمضان كريم | 2026</title>
+    <title>رمضان كريم | Houda Edition</title>
     <style>
-        :root {
-            --gold: #d4af37;
-            --black: #0a0a0a;
+        :root { --gold: #d4af37; --black: #0a0a0a; --glow: rgba(212, 175, 55, 0.3); }
+        
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background-color: var(--black); color: var(--gold);
+            font-family: 'Segoe UI', sans-serif; overflow: hidden;
+            transition: background 0.5s ease;
         }
 
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--black);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--gold);
-            overflow: hidden;
+        /* 1. الفانوس المنير (في الزاوية) */
+        #lantern {
+            position: fixed; top: 20px; left: 20px;
+            font-size: 30px; cursor: pointer; filter: drop-shadow(0 0 5px var(--gold));
+            z-index: 100; transition: 0.3s;
         }
+        #lantern.active { filter: drop-shadow(0 0 20px var(--gold)); transform: scale(1.2); }
 
-        /* --- شاشة الترحيب --- */
+        /* شاشة الترحيب */
         #splash-screen {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: var(--black);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.8s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--black); display: flex; justify-content: center;
+            align-items: center; z-index: 9999; transition: 0.8s;
         }
-
-        .pentagon-container {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
         .pentagon {
-            position: absolute;
-            width: 250px;
-            height: 250px;
-            background: var(--gold);
+            position: absolute; width: 200px; height: 200px; background: var(--gold);
             clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-            opacity: 0.4;
-            animation: pulse 2s infinite;
+            opacity: 0.4; animation: pulse 2s infinite;
         }
 
-        .pentagon-2 { transform: rotate(180deg); background: #b8860b; }
-
-        .welcome-text {
-            position: relative;
-            font-size: 2.5rem;
-            font-weight: bold;
-            z-index: 10;
-            text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
-        }
-
-        /* --- المحتوى الرئيسي --- */
+        /* المحتوى الرئيسي */
         #main-content {
-            display: none;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 40px 20px;
-            box-sizing: border-box;
-            animation: fadeIn 1.2s;
+            display: none; height: 100vh; flex-direction: column;
+            justify-content: space-between; align-items: center; padding: 20px;
+            box-sizing: border-box; text-align: center;
         }
 
-        .header-circles {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-top: 20px;
-        }
-
+        .header-circles { display: flex; gap: 20px; margin-top: 40px; }
         .circle {
-            width: 110px;
-            height: 110px;
-            border: 2px solid var(--gold);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--gold);
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.4s;
+            width: 100px; height: 100px; border: 2px solid var(--gold);
+            border-radius: 50%; display: flex; justify-content: center;
+            align-items: center; color: var(--gold); text-decoration: none; font-weight: bold;
         }
 
-        .circle:hover {
-            background-color: var(--gold);
-            color: var(--black);
+        /* 2. هدية اليوم (الهلال) */
+        .gift-section { margin-top: 30px; }
+        #moon-gift {
+            font-size: 50px; cursor: pointer; display: inline-block;
+            transition: 0.5s; animation: float 3s infinite ease-in-out;
+        }
+        #gift-text {
+            margin-top: 15px; font-size: 1.1rem; min-height: 50px;
+            max-width: 300px; color: #fff; display: none;
         }
 
-        .status-container {
-            text-align: center;
-        }
+        /* 3. شريط الإنجاز */
+        .progress-container { width: 80%; max-width: 300px; background: #222; height: 4px; border-radius: 10px; margin: 20px 0; }
+        #progress-bar { width: 30%; height: 100%; background: var(--gold); border-radius: 10px; box-shadow: 0 0 10px var(--gold); transition: 1s; }
 
-        .ramadan-title { font-size: 2.5rem; margin-bottom: 10px; }
+        footer { margin-bottom: 20px; }
+        .name-text { font-size: 1.5rem; font-family: serif; font-weight: bold; }
 
-        .day-counter {
-            border: 1px solid var(--gold);
-            padding: 10px 25px;
-            border-radius: 50px;
-            font-size: 1.2rem;
-        }
-
-        /* --- التوقيع (Footer) --- */
-        footer {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .ceo-text {
-            font-size: 0.8rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            opacity: 0.8;
-        }
-
-        .name-text {
-            font-size: 1.8rem;
-            font-family: 'Times New Roman', serif; /* خط كلاسيكي فخم */
-            font-weight: bold;
-            margin-top: 5px;
-            display: block;
-        }
-
-        /* --- الأنميشن --- */
+        /* الأنميشن */
         @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.1); opacity: 0.5; } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     </style>
 </head>
-<body>
+<body id="body">
+
+    <div id="lantern" onclick="toggleLight()">🏮</div>
 
     <div id="splash-screen">
-        <div class="pentagon-container">
-            <div class="pentagon"></div>
-            <div class="pentagon pentagon-2"></div>
-            <div class="welcome-text">أهلاً رمضان</div>
-        </div>
+        <div class="pentagon"></div>
+        <div style="z-index:10; font-size: 2rem; font-weight: bold;">أهلاً رمضان</div>
     </div>
 
-    <div id="main-content" style="display:none;">
+    <div id="main-content">
         <div class="header-circles">
             <a href="ward.html" class="circle">الورد اليومي</a>
             <a href="azkar.html" class="circle">الأذكار</a>
         </div>
 
+        <div class="gift-section">
+            <div id="moon-gift" onclick="openGift()">🌙</div>
+            <div id="gift-text">"وَتَزَوَّدُوا فَإِنَّ خَيْرَ الزَّادِ التَّقْوَىٰ"</div>
+        </div>
+
         <div class="status-container">
-            <div class="ramadan-title">رمضان كريم</div>
-            <div class="day-counter">2 رمضان 1447 هـ</div>
+            <div style="font-size: 2rem;">2 رمضان</div>
+            <div class="progress-container">
+                <div id="progress-bar"></div>
+            </div>
+            <div style="font-size: 0.8rem; opacity: 0.6;">إنجازك اليومي</div>
         </div>
 
         <footer>
-            <div class="ceo-text">CEO-Co-Founder</div>
+            <div style="font-size: 0.7rem; letter-spacing: 2px;">CEO-Co-Founder</div>
             <div class="name-text">Houda</div>
         </footer>
     </div>
 
     <script>
-        setTimeout(function() {
+        // 1. إخفاء شاشة الترحيب
+        setTimeout(() => {
             document.getElementById('splash-screen').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('splash-screen').style.display = 'none';
                 document.getElementById('main-content').style.display = 'flex';
             }, 800);
         }, 2000);
+
+        // 2. كود الفانوس (تغيير إضاءة الموقع)
+        function toggleLight() {
+            const body = document.getElementById('body');
+            const lantern = document.getElementById('lantern');
+            lantern.classList.toggle('active');
+            if(lantern.classList.contains('active')) {
+                body.style.background = "radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%)";
+            } else {
+                body.style.background = "#0a0a0a";
+            }
+        }
+
+        // 3. كود هدية اليوم
+        function openGift() {
+            const moon = document.getElementById('moon-gift');
+            const text = document.getElementById('gift-text');
+            moon.style.transform = "rotate(360deg) scale(0)";
+            setTimeout(() => {
+                moon.style.display = "none";
+                text.style.display = "block";
+            }, 500);
+        }
+
+        // محاكاة لشريط الإنجاز (يمكنك ربطه لاحقاً ببيانات حقيقية)
+        setTimeout(() => {
+            document.getElementById('progress-bar').style.width = "65%";
+        }, 3000);
     </script>
 </body>
 </html>
