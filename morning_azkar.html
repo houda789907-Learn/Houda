@@ -1,1 +1,175 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أذكار الصباح | Houda Edition</title>
+    <style>
+        :root { 
+            --gold: #d4af37; 
+            --deep-sky: #0a192f; 
+            --night-blue: #020c1b;
+            --white: #ffffff;
+        }
+        
+        body { 
+            margin: 0; padding: 20px;
+            background: radial-gradient(circle at center, var(--deep-sky) 0%, var(--night-blue) 100%); 
+            color: var(--white);
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+        }
 
+        /* ميزان الحسنات العلوي */
+        .rewards-box {
+            position: sticky; top: 10px; z-index: 100;
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid var(--gold);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px; border-radius: 50px;
+            display: inline-block; margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+        #total-hasanat { font-weight: bold; font-size: 1.5rem; color: var(--gold); }
+
+        h1 { color: var(--gold); margin-bottom: 30px; }
+
+        /* صندوق الذكر */
+        .azkar-container { max-width: 500px; margin: 0 auto; }
+        
+        .zekr-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 15px;
+            padding: 20px; margin-bottom: 15px;
+            cursor: pointer; transition: 0.3s;
+            position: relative; overflow: hidden;
+        }
+        .zekr-card:active { transform: scale(0.98); background: rgba(212, 175, 55, 0.1); }
+        
+        .zekr-text { font-size: 1.1rem; line-height: 1.6; margin-bottom: 15px; display: block; }
+        
+        .counter-area {
+            display: flex; justify-content: space-between; align-items: center;
+            border-top: 1px solid rgba(212, 175, 55, 0.2); padding-top: 10px;
+        }
+        .required-count { font-size: 0.8rem; opacity: 0.6; }
+        .current-count { 
+            background: var(--gold); color: var(--night-blue);
+            padding: 2px 12px; border-radius: 10px; font-weight: bold;
+        }
+
+        .back-link {
+            display: inline-block; margin: 30px 0;
+            color: var(--gold); text-decoration: none; border: 1px solid var(--gold);
+            padding: 8px 25px; border-radius: 20px;
+        }
+
+        footer { margin-top: 40px; padding-bottom: 20px; }
+        .ceo-name { font-weight: bold; color: var(--gold); font-family: serif; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+
+    <div class="rewards-box">
+        <span>ميزان الحسنات: </span>
+        <span id="total-hasanat">0</span>
+    </div>
+
+    <h1>أذكار الصباح</h1>
+
+    <div class="azkar-container">
+        <div class="zekr-card" onclick="countZekr(this, 1)">
+            <span class="zekr-text">أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ.</span>
+            <div class="counter-area">
+                <span class="required-count">التكرار: 1</span>
+                <span class="current-count">0</span>
+            </div>
+        </div>
+
+        <div class="zekr-card" onclick="countZekr(this, 3)">
+            <span class="zekr-text">أَصْبَحْنَا عَلَى فِطْرَةِ الإِسْلامِ، وَعَلَى كَلِمَةِ الإِخْلاصِ، وَعَلَى دِينِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ.</span>
+            <div class="counter-area">
+                <span class="required-count">التكرار: 3</span>
+                <span class="current-count">0</span>
+            </div>
+        </div>
+
+        <div class="zekr-card" onclick="countZekr(this, 3)">
+            <span class="zekr-text">اللَّهُمَّ إِنِّي أَصْبَحْتُ مِنْكَ فِي نِعْمَةٍ وَعَافِيَةٍ وَسِتْرٍ، فَأَتِمَّ عَلَيَّ نِعْمَتَكَ وَعَافِيَتَكَ وَسِتْرَكَ فِي الدُّنْيَا وَالآخِرَةِ.</span>
+            <div class="counter-area">
+                <span class="required-count">التكرار: 3</span>
+                <span class="current-count">0</span>
+            </div>
+        </div>
+
+        <div class="zekr-card" onclick="countZekr(this, 100)">
+            <span class="zekr-text">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ.</span>
+            <div class="counter-area">
+                <span class="required-count">التكرار: 100</span>
+                <span class="current-count">0</span>
+            </div>
+        </div>
+
+        <div class="zekr-card" onclick="countZekr(this, 10)">
+            <span class="zekr-text">لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير.</span>
+            <div class="counter-area">
+                <span class="required-count">التكرار: 10</span>
+                <span class="current-count">0</span>
+            </div>
+        </div>
+        
+        <div class="zekr-card" onclick="countZekr(this, 3)">
+            <span class="zekr-text">يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شأْنِي كُلَّهُ وَلا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ.</span>
+            <div class="counter-area">
+                <span class="required-count">التكرار: 3</span>
+                <span class="current-count">0</span>
+            </div>
+        </div>
+    </div>
+
+    <a href="index.html" class="back-link">العودة للرئيسية</a>
+
+    <footer>
+        <div style="font-size: 0.6rem; letter-spacing: 2px; opacity: 0.6;">CEO-CO-FOUNDER</div>
+        <div class="ceo-name">Houda</div>
+    </footer>
+
+    <script>
+        let hasanat = 0;
+        let globalCounter = 0;
+
+        function countZekr(card, max) {
+            let badge = card.querySelector('.current-count');
+            let count = parseInt(badge.innerText);
+            
+            if (count < max) {
+                count++;
+                badge.innerText = count;
+                globalCounter++;
+
+                // كل 10 ضغطات تزيد 10 حسنات
+                if (globalCounter % 10 === 0) {
+                    hasanat += 10;
+                    document.getElementById('total-hasanat').innerText = hasanat;
+                    
+                    // تأثير الهزاز إذا مدعوم
+                    if (navigator.vibrate) navigator.vibrate(50);
+                    
+                    // تأثير بصري لمربع الحسنات
+                    document.querySelector('.rewards-box').style.transform = "scale(1.2)";
+                    setTimeout(() => {
+                        document.querySelector('.rewards-box').style.transform = "scale(1)";
+                    }, 200);
+                }
+
+                // تغيير اللون عند الانتهاء من الذكر
+                if (count === max) {
+                    card.style.borderColor = "white";
+                    card.style.opacity = "0.5";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
