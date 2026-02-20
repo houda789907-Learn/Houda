@@ -1,6 +1,6 @@
 {
-  "name": "تطبيق حوده الرمضاني",
-  "short_name": "حوده",
+  "name": "تطبيق اذكاري ",
+  "short_name": "اذكاري",
   "description": "أذكار الصباح والمساء - إصدار 2026",
   "start_url": "index.html",
   "display": "standalone",
