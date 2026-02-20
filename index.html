@@ -35,7 +35,7 @@
         }
 
         /* القائمة الجانبية */
-        .side-menu {
+        .side-menu {  
             position: fixed; top: 0; right: -280px;
             width: 260px; height: 100%;
             background: var(--night-blue);
@@ -101,7 +101,7 @@
         <a href="istikhara.html">💍 دعاء الاستخارة</a>
         <a href="worry.html">😔 أدعية الهم والحزن</a>
         <a href="ramadan.html">🌙 أدعية رمضان</a>
-        <a href="relief.html">🤲 تفريج الكرب</a>
+        <a href="tasks.html">✅ ورد المحاسبة اليومي</a>
     </div>
 
     <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
@@ -132,7 +132,7 @@
             try {
                 const today = new Date();
                 
-                // إضافة يوم واحد عشان يظبط معاك (2 رمضان)
+                // إضافة يوم واحد عشان يظبط معاك (1 رمضان)
                 today.setDate(today.getDate() + 1);
 
                 const options = { day: 'numeric', month: 'long', year: 'numeric' };
