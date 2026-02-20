@@ -5,146 +5,171 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Houda Universe | رمضان 2026</title>
     <style>
-        :root { --gold: #d4af37; --black: #050505; }
+        :root { 
+            --gold: #d4af37; 
+            --sky-blue: #87CEEB; /* لون السماء */
+            --deep-sky: #00BFFF; 
+            --white: #ffffff;
+        }
         
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            background: var(--black); color: var(--gold);
+            /* خلفية متدرجة سماوية مريحة */
+            background: linear-gradient(180deg, var(--sky-blue) 0%, var(--deep-sky) 100%); 
+            color: var(--white);
             font-family: 'Segoe UI', sans-serif; overflow: hidden;
         }
 
-        /* 1. الفن التوليدي (Canvas الخلفية) */
-        #bg-canvas {
-            position: fixed; top: 0; left: 0; z-index: -1;
-        }
-
-        /* 2. الأدعية العائمة (Floating Duas) */
+        /* 1. الأدعية العائمة (واضحة جداً الآن) */
         .floating-dua {
-            position: fixed; bottom: -50px; color: rgba(212, 175, 55, 0.2);
-            font-size: 0.9rem; pointer-events: none; animation: floatUp 15s linear infinite;
+            position: fixed; bottom: -50px; 
+            color: var(--white);
+            font-size: 1.2rem; /* تكبير الخط للوضوح */
+            font-weight: bold;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2); /* ظل لجعلها بارزة */
+            pointer-events: none; 
+            animation: floatUp 12s linear infinite;
+            z-index: 5;
         }
 
-        /* 3. مساعد المشاعر (Emotion AI UI) */
-        .emotions-bar {
-            display: flex; gap: 15px; margin-top: 20px;
-        }
-        .emo-btn {
-            background: none; border: 1px solid var(--gold); color: var(--gold);
-            padding: 5px 10px; border-radius: 20px; cursor: pointer; font-size: 0.7rem;
-        }
-
-        /* شاشة التحدي (Social Challenge) */
+        /* شاشة التحدي العلوي */
         .social-counter {
-            position: fixed; top: 10px; right: 10px; font-size: 0.7rem; opacity: 0.6;
+            position: fixed; top: 15px; right: 15px; 
+            font-size: 0.8rem; background: rgba(255,255,255,0.2);
+            padding: 5px 15px; border-radius: 20px;
+            backdrop-filter: blur(5px);
         }
 
-        /* التصميم العام */
+        /* المحتوى الرئيسي */
         #app {
             display: flex; flex-direction: column; height: 100vh;
             justify-content: space-between; align-items: center; padding: 40px 20px;
             box-sizing: border-box; text-align: center;
+            position: relative; z-index: 10;
         }
 
+        .nav-circles { display: flex; gap: 20px; }
         .nav-circles a {
-            width: 80px; height: 80px; border: 1px solid var(--gold);
+            width: 90px; height: 90px; 
+            border: 2px solid var(--white);
+            background: rgba(255,255,255,0.1);
             border-radius: 50%; display: flex; justify-content: center;
-            align-items: center; text-decoration: none; color: var(--gold);
-            font-weight: bold; font-size: 0.8rem; margin: 0 10px;
+            align-items: center; text-decoration: none; color: var(--white);
+            font-weight: bold; transition: 0.3s;
+        }
+        .nav-circles a:hover { background: var(--white); color: var(--deep-sky); }
+
+        /* مساعد المشاعر */
+        .emotions-bar { display: flex; gap: 10px; margin-top: 20px; justify-content: center; }
+        .emo-btn {
+            background: var(--white); border: none; color: var(--deep-sky);
+            padding: 8px 18px; border-radius: 20px; cursor: pointer; 
+            font-weight: bold; font-size: 0.8rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        footer { text-align: center; }
-        .ceo-name { font-size: 1.5rem; font-family: serif; font-weight: bold; display: block; }
+        #ayah-display {
+            margin-top: 25px; font-size: 1.3rem; font-weight: bold;
+            color: var(--white); text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            min-height: 50px; padding: 0 20px;
+        }
+
+        footer { text-align: center; border-top: 1px solid rgba(255,255,255,0.2); width: 100%; padding-top: 20px; }
+        .ceo-sign { font-size: 0.7rem; letter-spacing: 3px; color: var(--white); opacity: 0.8; }
+        .ceo-name { font-size: 1.8rem; font-family: 'Times New Roman', serif; font-weight: bold; color: var(--white); }
 
         @keyframes floatUp {
-            from { transform: translateY(0); opacity: 0; }
-            50% { opacity: 0.5; }
-            to { transform: translateY(-110vh); opacity: 0; }
+            from { transform: translateY(0) scale(0.8); opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            to { transform: translateY(-110vh) scale(1.1); opacity: 0; }
+        }
+
+        /* سحب بيضاء خفيفة في الخلفية */
+        .cloud {
+            position: absolute; background: white; border-radius: 50%;
+            filter: blur(50px); opacity: 0.3; z-index: -1;
         }
     </style>
 </head>
 <body>
 
-    <canvas id="bg-canvas"></canvas>
+    <div class="cloud" style="width: 300px; height: 300px; top: 10%; left: -100px;"></div>
+    <div class="cloud" style="width: 400px; height: 400px; bottom: 10%; right: -100px;"></div>
 
-    <div class="social-counter">هناك <span id="online-count">128</span> شخصاً يسبحون معك الآن ⚡</div>
+    <div class="social-counter">⚡ <span id="online-count">145</span> يسبحون معك الآن</div>
 
     <div id="app">
-        <div class="nav-circles" style="display:flex;">
+        <div class="nav-circles">
             <a href="ward.html">الورد</a>
             <a href="azkar.html">الأذكار</a>
         </div>
 
         <div class="main-content">
-            <h1 id="main-greeting">رمضان كريم</h1>
+            <h1 style="font-size: 2.5rem; margin-bottom: 5px;">رمضان كريم</h1>
+            <p style="opacity: 0.9;">2 رمضان 1447 هـ</p>
             
-            <p style="font-size: 0.8rem;">كيف حال قلبك الآن؟</p>
             <div class="emotions-bar">
                 <button class="emo-btn" onclick="feel('sad')">قلق</button>
                 <button class="emo-btn" onclick="feel('tired')">متعب</button>
                 <button class="emo-btn" onclick="feel('happy')">فرحان</button>
             </div>
-            <div id="ayah-display" style="margin-top:20px; font-style: italic; min-height: 40px;"></div>
+            <div id="ayah-display"></div>
         </div>
 
         <footer>
-            <div style="font-size: 0.6rem; letter-spacing: 3px;">CEO-CO-FOUNDER</div>
+            <div class="ceo-sign">CEO-CO-FOUNDER</div>
             <span class="ceo-name">Houda</span>
         </footer>
     </div>
 
     <script>
-        // 1. كود الفن التوليدي (رسم خيوط ذهبية عشوائية)
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        // مصفوفة الأدعية الواضحة
+        const duas = [
+            "سُبْحَانَ اللَّهِ", 
+            "الْحَمْدُ لِلَّهِ", 
+            "لَا إِلَهَ إِلَّا اللَّهُ", 
+            "اللَّهُ أَكْبَرُ", 
+            "اللَّهُمَّ بَلِّغْنَا رَمَضَانَ",
+            "أستغفر الله العظيم",
+            "اللهم صلِّ على محمد"
+        ];
 
-        function drawArt() {
-            ctx.strokeStyle = 'rgba(212, 175, 55, 0.1)';
-            ctx.lineWidth = 0.5;
-            ctx.beginPath();
-            ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
-            ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
-            ctx.stroke();
-        }
-        setInterval(drawArt, 2000); // رسم خط كل ثانيتين
-
-        // 2. كود الأدعية العائمة
-        const duas = ["سبحان الله", "الحمد لله", "اللهم إنك عفو تحب العفو فاعف عنا", "يا حي يا قيوم"];
         function createFloatingDua() {
             const div = document.createElement('div');
             div.className = 'floating-dua';
             div.innerText = duas[Math.floor(Math.random() * duas.length)];
-            div.style.left = Math.random() * 80 + 10 + "%";
+            div.style.left = Math.random() * 70 + 15 + "%";
             document.body.appendChild(div);
-            setTimeout(() => div.remove(), 15000);
+            
+            // مسح العنصر بعد انتهاء الأنميشن
+            setTimeout(() => div.remove(), 12000);
         }
-        setInterval(createFloatingDua, 4000);
 
-        // 3. كود مساعد المشاعر (Emotion AI)
+        // إنشاء دعاء كل 3 ثواني ليكون المشهد مليئاً بالذكر
+        setInterval(createFloatingDua, 3000);
+
         const responses = {
-            sad: "ألا بذكر الله تطمئن القلوب",
-            tired: "واستعينوا بالصبر والصلاة",
-            happy: "لئن شكرتم لأزيدنكم"
+            sad: "﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾",
+            tired: "﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾",
+            happy: "﴿وَإِذْ تَأَذَّنَ رَبُّكُمْ لَئِن شَكَرْتُمْ لَأَزِيدَنَّكُمْ﴾"
         };
+
         function feel(type) {
             const display = document.getElementById('ayah-display');
+            display.style.transform = "scale(0.8)";
             display.style.opacity = 0;
+            
             setTimeout(() => {
                 display.innerText = responses[type];
+                display.style.transform = "scale(1)";
                 display.style.opacity = 1;
-                // تأثير "تحدي النور": وميض عند التفاعل
-                ctx.fillStyle = 'rgba(212, 175, 55, 0.2)';
-                ctx.fillRect(0,0,canvas.width, canvas.height);
-                setTimeout(() => ctx.clearRect(0,0,canvas.width, canvas.height), 100);
             }, 300);
         }
 
-        // محاكاة عدد المتواجدين
+        // تحديث عداد المتواجدين بشكل عشوائي
         setInterval(() => {
-            const count = document.getElementById('online-count');
-            count.innerText = Math.floor(Math.random() * (150 - 120) + 120);
-        }, 5000);
+            document.getElementById('online-count').innerText = Math.floor(Math.random() * (160 - 130) + 130);
+        }, 4000);
     </script>
 </body>
 </html>
