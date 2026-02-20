@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق اذكاري | الأذكار</title>
+    <title>تطبيق اذكاري | اموسوعة لأذكار</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="icon" href="icon.png" type="image/png">
 
     <style>
         :root { 
@@ -24,6 +23,7 @@
             color: var(--white); font-family: 'Segoe UI', sans-serif; overflow: hidden;
         }
 
+        /* زرار المنيو */
         .menu-btn {
             position: fixed; top: 20px; right: 20px;
             font-size: 1.8rem; color: var(--gold);
@@ -33,6 +33,7 @@
             border: 2px solid var(--gold);
         }
 
+        /* المنيو الجانبية */
         .side-menu {
             position: fixed; top: 0; right: -280px;
             width: 260px; height: 100%;
@@ -53,6 +54,20 @@
             background: rgba(0,0,0,0.7); display: none; z-index: 9998;
         }
 
+        /* الأدعية العائمة (اللي بتسبح) */
+        .floating-dua {
+            position: fixed; bottom: -100px; color: rgba(212, 175, 55, 0.6);
+            font-size: 1.2rem; font-weight: bold; width: 100%; text-align: center;
+            animation: floatUp 12s linear infinite; pointer-events: none; z-index: 5;
+        }
+
+        @keyframes floatUp { 
+            from { transform: translateY(0); opacity: 0; } 
+            10% { opacity: 1; } 
+            90% { opacity: 1; } 
+            to { transform: translateY(-115vh); opacity: 0; } 
+        }
+
         #app {
             display: flex; flex-direction: column; height: 100vh;
             justify-content: center; align-items: center; 
@@ -68,7 +83,6 @@
             border: 1px solid var(--gold); margin-bottom: 20px;
         }
 
-        /* بطاقة آية اليوم */
         .ayah-card {
             margin: 20px; padding: 15px; max-width: 300px;
             background: rgba(255, 255, 255, 0.05);
@@ -91,23 +105,23 @@
     <div class="side-menu" id="sideMenu">
         <a href="index.html">🏠 الرئيسية</a>
         <a href="#" onclick="enableNotifications()" style="color: #4ade80;">🔔 تفعيل الإشعارات</a>
-        <a href="morning.html">☀️ أذكار الصباح</a>
-        <a href="evening.html">🌙 أذكار المساء</a>
-        <a href="istikhara.html">💍 دعاء الاستخارة</a>
-        <a href="worry.html">😔 أدعية الهم والحزن</a>
-        <a href="ramadan.html">🌙 أدعية رمضان</a>
-        <a href="tasks.html">✅ ورد المحاسبة اليومي</a>
+        <a href="morning.html">☀️ أذكار الصباح</a>
+        <a href="evening.html">🌙 أذكار المساء</a>
+        <a href="tasks.html">✅ ورد المحاسبة اليومي</a>
+        <a href="ramadan.html">🌙 أدعية رمضان</a>
+        <a href="istikhara.html">💍 دعاء الاستخارة</a>
+        <a href="worry.html">😔 أدعية الهم والحزن</a>
     </div>
 
     <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
     <div id="app">
         <h1 class="main-title">رمضان كريم</h1>
-        <div id="ramadan-date">جاري التحميل...</div>
+        <div id="ramadan-date">2 رمضان 1447 هـ</div>
 
         <div class="ayah-card">
             <small style="color: var(--gold);">✨ آية لقلبك</small>
-            <p id="ayah-text" style="font-size: 1.1rem; margin-top: 10px;">﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾</p>
+            <p id="ayah-text" style="font-size: 1.1rem; margin-top: 10px;">جاري اختيار آية...</p>
         </div>
 
         <footer>
@@ -117,7 +131,6 @@
     </div>
 
     <script>
-        // 1. فتح المنيو
         function toggleMenu() {
             const menu = document.getElementById('sideMenu');
             const overlay = document.getElementById('overlay');
@@ -125,46 +138,25 @@
             overlay.style.display = menu.classList.contains('open') ? 'block' : 'none';
         }
 
-        // 2. التاريخ الهجري التلقائي
-        function updateDate() {
-            const today = new Date();
-            // تعديل بسيط ليوافق رمضان 1447هـ
-            const options = { day: 'numeric', month: 'long', year: 'numeric' };
-            const hijriDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', options).format(today);
-            document.getElementById('ramadan-date').innerText = hijriDate;
+        // دالة الأدعية الطائرة (اللي كنت بتسأل عليها)
+        const floatingDuas = ["سبحان الله", "الحمد لله", "لا إله إلا الله", "الله أكبر", "أستغفر الله", "اللهم صلِّ على محمد"];
+        function spawnDua() {
+            const d = document.createElement('div');
+            d.className = 'floating-dua';
+            d.innerText = floatingDuas[Math.floor(Math.random() * floatingDuas.length)];
+            d.style.left = Math.random() * 80 + 10 + '%';
+            document.body.appendChild(d);
+            setTimeout(() => d.remove(), 12000);
         }
+        setInterval(spawnDua, 4000); // كل 4 ثواني بيطلع ذكر جديد يسبح
 
-        // 3. تفعيل الإشعارات (للمستخدمين اللي نزلوا التطبيق)
-        function enableNotifications() {
-            if (!("Notification" in window)) {
-                alert("متصفحك لا يدعم الإشعارات");
-                return;
-            }
-            Notification.requestPermission().then(permission => {
-                if (permission === "granted") {
-                    navigator.serviceWorker.ready.then(reg => {
-                        reg.showNotification('تم التفعيل يا حوده! ✅', {
-                            body: 'ستصلك الأذكار تلقائياً حتى والتطبيق مقفول.',
-                            icon: 'icon.png'
-                        });
-                    });
-                }
-            });
-        }
-
-        // 4. آية اليوم المتغيرة
         function setDailyAyah() {
-            const ayat = [
-                "﴿وَبَشِّرِ الصَّابِرِينَ﴾",
-                "﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾",
-                "﴿لَا تَدْرِي لَعَلَّ اللَّهَ يُحْدِثُ بَعْدَ ذَلِكَ أَمْرًا﴾",
-                "﴿وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَىٰ﴾"
-            ];
+            const ayat = ["﴿وَبَشِّرِ الصَّابِرِينَ﴾", "﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾", "﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾", "﴿فَاصْبِرْ صَبْرًا جَمِيلًا﴾"];
             const day = new Date().getDate();
             document.getElementById('ayah-text').innerText = ayat[day % ayat.length];
         }
 
-        // 5. توليد النجوم
+        // نجوم الخلفية
         const container = document.getElementById('stars-container');
         for (let i = 0; i < 60; i++) {
             const star = document.createElement('div');
@@ -177,15 +169,16 @@
             container.appendChild(star);
         }
 
-        // تشغيل كل الوظائف عند التحميل
         window.onload = () => {
-            updateDate();
             setDailyAyah();
-            // تسجيل الـ Service Worker للإشعارات
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js');
-            }
+            if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
         };
+
+        function enableNotifications() {
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") { alert("تم تفعيل الإشعارات بنجاح! ✅"); }
+            });
+        }
     </script>
 </body>
 </html>
