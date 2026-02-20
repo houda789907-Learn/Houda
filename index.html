@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق اذكاري | موسوعة الأذكار</title>
+    <title>تطبيق حوده | موسوعة الأذكار</title>
     
+    <meta name="description" content="تطبيق  للأذكار اليومية - نسخة رمضان 1447 هـ">
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="icon" href="icon.png" type="image/png">
-    <link rel="apple-touch-icon" href="icon.png">
 
     <style>
         :root { 
@@ -25,15 +25,15 @@
             color: var(--white); font-family: 'Segoe UI', sans-serif; overflow: hidden;
         }
 
-        /* زرار الـ 3 شرط - ثابت وفوق كل شيء */
+        /* زرار الـ 3 شرط - ثابت ولا يختفي */
         .menu-btn {
             position: fixed; top: 20px; right: 20px;
             font-size: 1.8rem; color: var(--gold);
             cursor: pointer; z-index: 9999;
             background: rgba(10, 25, 47, 0.9);
-            padding: 8px 15px; border-radius: 12px;
+            padding: 8px 12px; border-radius: 12px;
             border: 2px solid var(--gold);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            display: block !important;
         }
 
         /* القائمة الجانبية */
@@ -42,57 +42,63 @@
             width: 260px; height: 100%;
             background: var(--night-blue);
             border-left: 3px solid var(--gold);
-            z-index: 10000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10000; transition: 0.4s ease-in-out;
             padding-top: 80px; display: flex; flex-direction: column;
             overflow-y: auto;
         }
         .side-menu.open { right: 0; }
         .side-menu a {
             color: var(--white); text-decoration: none;
-            padding: 18px 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-            font-size: 1.1rem; transition: 0.3s; text-align: right;
-            display: flex; align-items: center; gap: 10px;
+            padding: 15px 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            font-size: 1.1rem; text-align: right; transition: 0.3s;
         }
         .side-menu a:hover { background: var(--gold); color: var(--night-blue); }
 
-        /* غطاء خلفي عند فتح المنيو */
         .overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.7); display: none; z-index: 9998;
-            backdrop-filter: blur(3px);
         }
 
         /* النجوم */
-        #stars-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        #stars-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
         .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--duration) infinite; }
 
+        /* المحتوى الرئيسي */
         #app {
             display: flex; flex-direction: column; height: 100vh;
             justify-content: center; align-items: center; 
             position: relative; z-index: 10; text-align: center;
         }
 
-        .main-title { font-size: 2.5rem; color: var(--gold); text-shadow: 0 0 20px rgba(212,175,55,0.5); margin-bottom: 10px; }
+        .main-title { font-size: 2.8rem; color: var(--gold); margin-bottom: 5px; text-shadow: 0 0 15px rgba(212,175,55,0.4); }
         
-        /* الأدعية العائمة */
+        /* مربع التاريخ الهجري */
+        #ramadan-date {
+            font-size: 1.3rem; color: var(--gold);
+            background: rgba(212, 175, 55, 0.1);
+            padding: 8px 25px; border-radius: 20px;
+            border: 1px solid var(--gold);
+            margin-bottom: 20px;
+        }
+
         .floating-dua {
-            position: fixed; bottom: -100px; color: rgba(255,255,255,0.8);
-            font-size: 1.2rem; font-weight: bold; width: 100%; text-align: center;
+            position: fixed; bottom: -100px; color: rgba(255,255,255,0.7);
+            font-size: 1.1rem; font-weight: bold; width: 100%; text-align: center;
             animation: floatUp 15s linear infinite; pointer-events: none;
         }
 
-        @keyframes floatUp { from { transform: translateY(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } to { transform: translateY(-120vh); opacity: 0; } }
+        @keyframes floatUp { from { transform: translateY(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } to { transform: translateY(-115vh); opacity: 0; } }
         @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-        footer { position: absolute; bottom: 20px; width: 100%; text-align: center; }
-        .ceo-name { color: var(--gold); font-size: 1.5rem; font-weight: bold; letter-spacing: 2px; }
+        footer { position: absolute; bottom: 15px; width: 100%; text-align: center; }
+        .ceo-name { color: var(--gold); font-size: 1.4rem; font-weight: bold; letter-spacing: 3px; font-family: 'Times New Roman', serif; }
     </style>
 </head>
 <body>
 
     <div id="stars-container"></div>
 
-    <div class="menu-btn" onclick="toggleMenu()">☰ القائمة</div>
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
     <div class="side-menu" id="sideMenu">
         <a href="index.html">🏠 الرئيسية</a>
@@ -109,19 +115,19 @@
 
     <div id="app">
         <h1 class="main-title">رمضان كريم</h1>
-        <p style="font-size: 1.2rem; opacity: 0.9;">تطبيق حوده للأذكار</p>
         
-        <div style="margin-top: 30px;">
-             <p id="quote" style="color: var(--gold); font-weight: bold; font-size: 1.3rem; padding: 0 20px;"></p>
-        </div>
+        <div id="ramadan-date">جاري تحميل التاريخ...</div>
+
+        <div id="quote" style="margin-top: 20px; font-size: 1.2rem; padding: 0 20px; color: var(--white); opacity: 0.8;"></div>
 
         <footer>
-            <div style="font-size: 0.7rem; color: var(--gold); opacity: 0.6;">DESIGNED BY</div>
+            <div style="font-size: 0.6rem; color: var(--gold); letter-spacing: 2px;">CEO-CO-FOUNDER</div>
             <div class="ceo-name">HOUDA</div>
         </footer>
     </div>
 
     <script>
+        // دالة فتح القائمة
         function toggleMenu() {
             const menu = document.getElementById('sideMenu');
             const overlay = document.getElementById('overlay');
@@ -129,9 +135,18 @@
             overlay.style.display = menu.classList.contains('open') ? 'block' : 'none';
         }
 
+        // دالة التاريخ الهجري التلقائي
+        function updateDate() {
+            const today = new Date();
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            const hijriDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', options).format(today);
+            document.getElementById('ramadan-date').innerText = hijriDate;
+        }
+        updateDate();
+
         // توليد النجوم
         const container = document.getElementById('stars-container');
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 80; i++) {
             const star = document.createElement('div');
             star.className = 'star';
             const size = Math.random() * 3 + 'px';
@@ -142,8 +157,8 @@
             container.appendChild(star);
         }
 
-        // أدعية عائمة عشوائية
-        const duas = ["سبحان الله", "الحمد لله", "الله أكبر", "لا إله إلا الله", "اللهم صلِّ على محمد"];
+        // أدعية عائمة
+        const duas = ["سبحان الله", "الحمد لله", "أستغفر الله", "اللهم صلِّ على محمد", "لا إله إلا الله"];
         function spawnDua() {
             const d = document.createElement('div');
             d.className = 'floating-dua';
@@ -152,10 +167,10 @@
             document.body.appendChild(d);
             setTimeout(() => d.remove(), 15000);
         }
-        setInterval(spawnDua, 4000);
+        setInterval(spawnDua, 4500);
 
-        // آية متغيرة في الصفحة الرئيسية
-        const quotes = ["﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾", "﴿وَقَالَ رَبُّكُمُ ادْعُونِي أَسْتَجِبْ لَكُمْ﴾", "﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾"];
+        // آية متغيرة
+        const quotes = ["﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾", "﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾", "﴿وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَىٰ﴾"];
         document.getElementById('quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
     </script>
 </body>
