@@ -1,25 +1,28 @@
-const cacheName = 'houda-v1';
+const cacheName = 'houda-app-v1';
 const assets = [
   './',
   './index.html',
   './morning_azkar.html',
-  './evening_azkar.html'
+  './evening_azkar.html',
+  './icon.png',
+  './manifest.json'
 ];
 
-// تثبيت التطبيق وتخزين الملفات للعمل بدون إنترنت
+// تثبيت الخدمة وتخزين الملفات
 self.addEventListener('install', evt => {
   evt.waitUntil(
     caches.open(cacheName).then(cache => {
+      console.log('بيخزن الملفات عشان يشتغل من غير نت...');
       cache.addAll(assets);
     })
   );
 });
 
-// استقبال الإشعارات في الخلفية
-self.addEventListener('push', evt => {
-  const data = evt.data.json();
-  self.registration.showNotification(data.title, {
-    body: data.body,
-    icon: 'https://cdn-icons-png.flaticon.com/512/2319/2319323.png'
-  });
+// تشغيل التطبيق من المخزن في حالة عدم وجود نت
+self.addEventListener('fetch', evt => {
+  evt.respondWith(
+    caches.match(evt.request).then(rec => {
+      return rec || fetch(evt.request);
+    })
+  );
 });
