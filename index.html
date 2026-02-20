@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>رمضان كريم</title>
     <style>
-        /* إعدادات الألوان العامة */
         :root {
             --gold: #d4af37;
             --black: #0a0a0a;
@@ -18,10 +17,10 @@
             height: 100%;
             background-color: var(--black);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden; /* لمنع التمرير أثناء شاشة الترحيب */
+            overflow-x: hidden;
         }
 
-        /* --- شاشة الترحيب (Splash Screen) --- */
+        /* --- شاشة الترحيب --- */
         #splash-screen {
             position: fixed;
             top: 0;
@@ -33,7 +32,7 @@
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.8s ease;
         }
 
         .pentagon-container {
@@ -43,19 +42,18 @@
             align-items: center;
         }
 
-        /* رسم الشكل الخماسي باستخدام CSS clip-path */
         .pentagon {
             position: absolute;
-            width: 200px;
-            height: 200px;
+            width: 250px;
+            height: 250px;
             background: var(--gold);
             clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-            opacity: 0.5;
+            opacity: 0.4;
             animation: pulse 2s infinite;
         }
 
         .pentagon-2 {
-            transform: rotate(180deg); /* تداخل الشكلين */
+            transform: rotate(180deg);
             background: #b8860b;
         }
 
@@ -65,27 +63,27 @@
             font-size: 2.5rem;
             font-weight: bold;
             z-index: 10;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-            animation: scaleUp 1s ease-out;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
         }
 
         /* --- الصفحة الرئيسية --- */
         #main-content {
-            display: none; /* مخفية في البداية */
+            display: none;
             padding: 20px;
             text-align: center;
+            animation: fadeIn 1s;
         }
 
         .header-circles {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            margin-top: 50px;
+            gap: 20px;
+            margin-top: 40px;
         }
 
         .circle {
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             border: 2px solid var(--gold);
             border-radius: 50%;
             display: flex;
@@ -95,25 +93,57 @@
             text-decoration: none;
             font-weight: bold;
             transition: 0.3s;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            font-size: 0.9rem;
         }
 
         .circle:hover {
             background-color: var(--gold);
             color: var(--black);
-            box-shadow: 0 0 25px var(--gold);
+        }
+
+        /* --- العداد التنازلي --- */
+        #countdown-container {
+            margin-top: 60px;
+            color: var(--gold);
+        }
+
+        .countdown-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            direction: ltr; /* لجعل الأرقام تظهر بشكل صحيح */
+        }
+
+        .time-box {
+            border: 1px solid var(--gold);
+            padding: 10px;
+            min-width: 70px;
+            border-radius: 8px;
+        }
+
+        .time-number {
+            display: block;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .time-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
         }
 
         /* --- الأنميشن --- */
         @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.1); opacity: 0.6; }
-            100% { transform: scale(1); opacity: 0.3; }
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.5; }
         }
-
-        @keyframes scaleUp {
-            from { transform: scale(0); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+        @keyframes fadeIn {
+            from { opacity: 0; } to { opacity: 1; }
         }
     </style>
 </head>
@@ -129,26 +159,66 @@
 
     <div id="main-content">
         <div class="header-circles">
-            <a href="#" class="circle">الورد اليومي</a>
-            <a href="#" class="circle">الأذكار</a>
+            <a href="ward.html" class="circle">الورد اليومي</a>
+            <a href="azkar.html" class="circle">الأذكار</a>
         </div>
-        
-        <h2 style="color: var(--gold); margin-top: 100px;">مبارك عليكم الشهر</h2>
+
+        <div id="countdown-container">
+            <div class="countdown-title">المتبقي على شهر رمضان</div>
+            <div class="timer">
+                <div class="time-box">
+                    <span class="time-number" id="days">00</span>
+                    <span class="time-label">يوم</span>
+                </div>
+                <div class="time-box">
+                    <span class="time-number" id="hours">00</span>
+                    <span class="time-label">ساعة</span>
+                </div>
+                <div class="time-box">
+                    <span class="time-number" id="minutes">00</span>
+                    <span class="time-label">دقيقة</span>
+                </div>
+                <div class="time-box">
+                    <span class="time-number" id="seconds">00</span>
+                    <span class="time-label">ثانية</span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // إخفاء شاشة الترحيب بعد ثانيتين
+        // 1. إخفاء شاشة الترحيب
         setTimeout(function() {
-            const splash = document.getElementById('splash-screen');
-            const main = document.getElementById('main-content');
-            
-            splash.style.opacity = '0';
+            document.getElementById('splash-screen').style.opacity = '0';
             setTimeout(() => {
-                splash.style.display = 'none';
-                main.style.display = 'block';
-                document.body.style.overflow = 'auto'; // إعادة التمرير
-            }, 500);
-        }, 2000); // 2000 مللي ثانية = ثانيتين
+                document.getElementById('splash-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+            }, 800);
+        }, 2000);
+
+        // 2. حساب العداد التنازلي (تاريخ رمضان المتوقع 1 مارس 2025 كمثال)
+        // يمكنك تغيير التاريخ من هنا
+        const ramadanDate = new Date("March 1, 2025 00:00:00").getTime();
+
+        const updateTimer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = ramadanDate - now;
+
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerHTML = d;
+            document.getElementById("hours").innerHTML = h;
+            document.getElementById("minutes").innerHTML = m;
+            document.getElementById("seconds").innerHTML = s;
+
+            if (distance < 0) {
+                clearInterval(updateTimer);
+                document.getElementById("countdown-container").innerHTML = "رمضان كريم!";
+            }
+        }, 1000);
     </script>
 </body>
 </html>
