@@ -3,24 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق حوده | أذكار الصباح والمساء</title>
-    <meta name="description" content="تطبيق حوده للأذكار اليومية، أذكار الصباح والمساء بدون إنترنت، نسخة رمضان كريم 1447 هـ.">
+    <title>تطبيق اذكاري | موسوعة الأذكار</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="icon" href="icon.png" type="image/png">
     <link rel="apple-touch-icon" href="icon.png">
-
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('Houda App Updated!'))
-            .catch(err => console.log('Error', err));
-        });
-      }
-    </script>
 
     <style>
         :root { 
@@ -36,15 +25,15 @@
             color: var(--white); font-family: 'Segoe UI', sans-serif; overflow: hidden;
         }
 
-        /* زرار الـ 3 شرط - تأكدت إنه يظهر فوق أي حاجة */
+        /* زرار الـ 3 شرط - ثابت وفوق كل شيء */
         .menu-btn {
             position: fixed; top: 20px; right: 20px;
-            font-size: 2rem; color: var(--gold);
-            cursor: pointer; z-index: 9999; /* رقم عالي جدا عشان ما يختفيش */
+            font-size: 1.8rem; color: var(--gold);
+            cursor: pointer; z-index: 9999;
             background: rgba(10, 25, 47, 0.9);
-            padding: 5px 15px; border-radius: 12px;
+            padding: 8px 15px; border-radius: 12px;
             border: 2px solid var(--gold);
-            line-height: 1;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
         }
 
         /* القائمة الجانبية */
@@ -53,77 +42,82 @@
             width: 260px; height: 100%;
             background: var(--night-blue);
             border-left: 3px solid var(--gold);
-            z-index: 10000; transition: 0.4s ease-in-out;
+            z-index: 10000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             padding-top: 80px; display: flex; flex-direction: column;
+            overflow-y: auto;
         }
         .side-menu.open { right: 0; }
         .side-menu a {
             color: var(--white); text-decoration: none;
             padding: 18px 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-            font-size: 1.2rem; transition: 0.3s; text-align: right;
+            font-size: 1.1rem; transition: 0.3s; text-align: right;
+            display: flex; align-items: center; gap: 10px;
         }
         .side-menu a:hover { background: var(--gold); color: var(--night-blue); }
 
+        /* غطاء خلفي عند فتح المنيو */
         .overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.7); display: none; z-index: 9998;
+            backdrop-filter: blur(3px);
         }
 
-        /* باقي استايل النجوم والأبلكيشن */
-        #stars-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
-        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite ease-in-out; }
-        
-        #app { display: flex; flex-direction: column; height: 100vh; justify-content: space-between; align-items: center; padding: 60px 20px; box-sizing: border-box; position: relative; z-index: 10; }
-        
-        .nav-circles { display: flex; gap: 20px; }
-        .nav-circles a { width: 90px; height: 90px; border: 1.5px solid var(--gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; text-decoration: none; color: var(--gold); font-weight: bold; font-size: 0.8rem; text-align: center; }
-        
-        .floating-dua { position: fixed; bottom: -80px; color: white; font-size: 1.1rem; font-weight: bold; animation: floatUp 15s linear infinite; z-index: 5; text-align: center; width: 100%; }
+        /* النجوم */
+        #stars-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--duration) infinite; }
 
-        @keyframes floatUp { from { transform: translateY(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } to { transform: translateY(-110vh); opacity: 0; } }
-        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        #app {
+            display: flex; flex-direction: column; height: 100vh;
+            justify-content: center; align-items: center; 
+            position: relative; z-index: 10; text-align: center;
+        }
+
+        .main-title { font-size: 2.5rem; color: var(--gold); text-shadow: 0 0 20px rgba(212,175,55,0.5); margin-bottom: 10px; }
         
-        .emo-btn { background: rgba(255,255,255,0.1); border: 1px solid var(--gold); color: var(--gold); padding: 8px 15px; border-radius: 20px; cursor: pointer; margin: 5px; }
-        #ayah-display { margin-top: 20px; color: var(--gold); font-weight: bold; }
-        .ceo-name { font-size: 1.5rem; color: var(--gold); font-family: serif; }
+        /* الأدعية العائمة */
+        .floating-dua {
+            position: fixed; bottom: -100px; color: rgba(255,255,255,0.8);
+            font-size: 1.2rem; font-weight: bold; width: 100%; text-align: center;
+            animation: floatUp 15s linear infinite; pointer-events: none;
+        }
+
+        @keyframes floatUp { from { transform: translateY(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } to { transform: translateY(-120vh); opacity: 0; } }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+        footer { position: absolute; bottom: 20px; width: 100%; text-align: center; }
+        .ceo-name { color: var(--gold); font-size: 1.5rem; font-weight: bold; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
     <div id="stars-container"></div>
 
-    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    <div class="menu-btn" onclick="toggleMenu()">☰ القائمة</div>
 
     <div class="side-menu" id="sideMenu">
         <a href="index.html">🏠 الرئيسية</a>
-        <a href="morning_azkar.html">☀️ أذكار الصباح</a>
-        <a href="evening_azkar.html">🌙 أذكار المساء</a>
+        <a href="morning.html">☀️ أذكار الصباح</a>
+        <a href="evening.html">🌙 أذكار المساء</a>
         <a href="istikhara.html">💍 دعاء الاستخارة</a>
-        <a href="travel.html">✈️ دعاء السفر</a>
-        <a href="prayer_azkar.html">📿 أذكار الصلاة</a>
+        <a href="worry.html">😔 أدعية الهم والحزن</a>
+        <a href="ramadan.html">🌙 أدعية رمضان</a>
+        <a href="relief.html">🤲 تفريج الكرب</a>
+        <a href="prayer.html">📿 أذكار الصلاة</a>
     </div>
 
     <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
     <div id="app">
-        <div class="nav-circles">
-            <a href="morning_azkar.html">أذكار<br>الصباح</a>
-            <a href="evening_azkar.html">أذكار<br>المساء</a>
-        </div>
-
-        <div class="main-content">
-            <h1 style="color: var(--gold);">رمضان كريم</h1>
-            <div class="emotions-bar">
-                <button class="emo-btn" onclick="feel('sad')">قلق</button>
-                <button class="emo-btn" onclick="feel('tired')">متعب</button>
-                <button class="emo-btn" onclick="feel('happy')">فرحان</button>
-            </div>
-            <div id="ayah-display"></div>
+        <h1 class="main-title">رمضان كريم</h1>
+        <p style="font-size: 1.2rem; opacity: 0.9;">تطبيق حوده للأذكار</p>
+        
+        <div style="margin-top: 30px;">
+             <p id="quote" style="color: var(--gold); font-weight: bold; font-size: 1.3rem; padding: 0 20px;"></p>
         </div>
 
         <footer>
-            <div style="font-size: 0.7rem; color: var(--gold);">CEO-CO-FOUNDER</div>
-            <div class="ceo-name">Houda</div>
+            <div style="font-size: 0.7rem; color: var(--gold); opacity: 0.6;">DESIGNED BY</div>
+            <div class="ceo-name">HOUDA</div>
         </footer>
     </div>
 
@@ -135,40 +129,34 @@
             overlay.style.display = menu.classList.contains('open') ? 'block' : 'none';
         }
 
-        // نجوم
-        const starsContainer = document.getElementById('stars-container');
-        for (let i = 0; i < 80; i++) {
+        // توليد النجوم
+        const container = document.getElementById('stars-container');
+        for (let i = 0; i < 100; i++) {
             const star = document.createElement('div');
             star.className = 'star';
-            star.style.width = Math.random() * 3 + 'px';
-            star.style.height = star.style.width;
+            const size = Math.random() * 3 + 'px';
+            star.style.width = size; star.style.height = size;
             star.style.top = Math.random() * 100 + '%';
             star.style.left = Math.random() * 100 + '%';
             star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
-            starsContainer.appendChild(star);
+            container.appendChild(star);
         }
 
-        // أدعية
-        const customDuas = ["اللهم صلِّ على محمد", "سبحان الله وبحمده", "أستغفر الله", "لا إله إلا الله"];
-        function createFloatingDua() {
-            const div = document.createElement('div');
-            div.className = 'floating-dua';
-            div.innerText = customDuas[Math.floor(Math.random() * customDuas.length)];
-            div.style.left = Math.random() * 30 + 10 + "%";
-            document.body.appendChild(div);
-            setTimeout(() => div.remove(), 15000);
+        // أدعية عائمة عشوائية
+        const duas = ["سبحان الله", "الحمد لله", "الله أكبر", "لا إله إلا الله", "اللهم صلِّ على محمد"];
+        function spawnDua() {
+            const d = document.createElement('div');
+            d.className = 'floating-dua';
+            d.innerText = duas[Math.floor(Math.random() * duas.length)];
+            d.style.left = Math.random() * 60 + 20 + '%';
+            document.body.appendChild(d);
+            setTimeout(() => d.remove(), 15000);
         }
-        setInterval(createFloatingDua, 5000);
+        setInterval(spawnDua, 4000);
 
-        function feel(type) {
-            const display = document.getElementById('ayah-display');
-            const responses = {
-                sad: "﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾",
-                tired: "﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾",
-                happy: "﴿وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَىٰ﴾"
-            };
-            display.innerText = responses[type];
-        }
+        // آية متغيرة في الصفحة الرئيسية
+        const quotes = ["﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾", "﴿وَقَالَ رَبُّكُمُ ادْعُونِي أَسْتَجِبْ لَكُمْ﴾", "﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾"];
+        document.getElementById('quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
     </script>
 </body>
 </html>
