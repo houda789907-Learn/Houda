@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رمضان كريم 2026</title>
+    <title>رمضان كريم | 2026</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -17,16 +17,15 @@
             height: 100%;
             background-color: var(--black);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--gold);
             overflow: hidden;
         }
 
         /* --- شاشة الترحيب --- */
         #splash-screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background-color: var(--black);
             display: flex;
             justify-content: center;
@@ -52,25 +51,26 @@
             animation: pulse 2s infinite;
         }
 
-        .pentagon-2 {
-            transform: rotate(180deg);
-            background: #b8860b;
-        }
+        .pentagon-2 { transform: rotate(180deg); background: #b8860b; }
 
         .welcome-text {
             position: relative;
-            color: var(--gold);
             font-size: 2.5rem;
             font-weight: bold;
             z-index: 10;
             text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
         }
 
-        /* --- الصفحة الرئيسية --- */
+        /* --- المحتوى الرئيسي --- */
         #main-content {
             display: none;
-            padding: 20px;
-            text-align: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
             animation: fadeIn 1.2s;
         }
 
@@ -78,12 +78,12 @@
             display: flex;
             justify-content: center;
             gap: 25px;
-            margin-top: 50px;
+            margin-top: 20px;
         }
 
         .circle {
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             border: 2px solid var(--gold);
             border-radius: 50%;
             display: flex;
@@ -93,44 +93,50 @@
             text-decoration: none;
             font-weight: bold;
             transition: 0.4s;
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
         }
 
         .circle:hover {
             background-color: var(--gold);
             color: var(--black);
-            box-shadow: 0 0 20px var(--gold);
         }
 
-        /* --- عرض حالة الشهر --- */
         .status-container {
-            margin-top: 80px;
-            color: var(--gold);
+            text-align: center;
         }
 
-        .ramadan-title {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
-        }
+        .ramadan-title { font-size: 2.5rem; margin-bottom: 10px; }
 
         .day-counter {
-            font-size: 1.4rem;
             border: 1px solid var(--gold);
-            display: inline-block;
-            padding: 10px 30px;
+            padding: 10px 25px;
             border-radius: 50px;
-            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+
+        /* --- التوقيع (Footer) --- */
+        footer {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .ceo-text {
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        .name-text {
+            font-size: 1.8rem;
+            font-family: 'Times New Roman', serif; /* خط كلاسيكي فخم */
+            font-weight: bold;
+            margin-top: 5px;
+            display: block;
         }
 
         /* --- الأنميشن --- */
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.1); opacity: 0.5; }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; } to { opacity: 1; }
-        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.1); opacity: 0.5; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -143,7 +149,7 @@
         </div>
     </div>
 
-    <div id="main-content">
+    <div id="main-content" style="display:none;">
         <div class="header-circles">
             <a href="ward.html" class="circle">الورد اليومي</a>
             <a href="azkar.html" class="circle">الأذكار</a>
@@ -151,34 +157,23 @@
 
         <div class="status-container">
             <div class="ramadan-title">رمضان كريم</div>
-            <div class="day-counter" id="today-info">
-                جمعة مباركة | 3 رمضان 1447 هـ
-            </div>
-            <p style="color: #888; margin-top: 40px; font-style: italic;">
-                "اللهم أعنا على صيامه وقيامه"
-            </p>
+            <div class="day-counter">2 رمضان 1447 هـ</div>
         </div>
+
+        <footer>
+            <div class="ceo-text">CEO-Co-Founder</div>
+            <div class="name-text">Houda</div>
+        </footer>
     </div>
 
     <script>
-        // إخفاء الترحيب وإظهار المحتوى
         setTimeout(function() {
-            const splash = document.getElementById('splash-screen');
-            const main = document.getElementById('main-content');
-            
-            splash.style.opacity = '0';
+            document.getElementById('splash-screen').style.opacity = '0';
             setTimeout(() => {
-                splash.style.display = 'none';
-                main.style.display = 'block';
+                document.getElementById('splash-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'flex';
             }, 800);
         }, 2000);
-
-        // تحديث التاريخ بناءً على تاريخ اليوم 20 فبراير 2026
-        // بما أن 18 فبراير كان أول رمضان، فاليوم هو 3 رمضان تقريباً
-        const today = new Date();
-        if(today.getDate() == 20 && (today.getMonth()+1) == 2) {
-             document.getElementById("today-info").innerHTML = "اليوم: الجمعة | 3 رمضان 1447 هـ";
-        }
     </script>
 </body>
 </html>
