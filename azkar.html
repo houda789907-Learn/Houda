@@ -3,36 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الأذكار</title>
+    <title>الورد اليومي - الجزء الأول</title>
     <style>
-        body { background-color: #0a0a0a; color: #d4af37; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 20px; }
-        .zekr-box { border: 1px solid #d4af37; margin: 15px auto; padding: 15px; max-width: 400px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
-        .zekr-box:active { transform: scale(0.95); background: #1a1a1a; }
-        .counter { font-size: 2rem; display: block; margin-top: 10px; }
-        .back-btn { display: inline-block; margin-top: 20px; color: #0a0a0a; background: #d4af37; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        :root {
+            --gold: #d4af37;
+            --black: #0a0a0a;
+        }
+        body { 
+            background-color: var(--black); 
+            color: var(--gold); 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .content {
+            margin-top: 50px;
+        }
+
+        h1 { 
+            font-size: 2rem; 
+            border-bottom: 2px solid var(--gold); 
+            display: inline-block; 
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .ward-box {
+            border: 1px solid var(--gold);
+            padding: 40px 20px;
+            border-radius: 15px;
+            background: rgba(212, 175, 55, 0.05);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .ward-number {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .ward-text {
+            font-size: 1.5rem;
+        }
+
+        .back-btn { 
+            display: inline-block; 
+            margin-top: 30px; 
+            color: var(--black); 
+            background: var(--gold); 
+            padding: 10px 30px; 
+            text-decoration: none; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+        }
+
+        footer {
+            margin-bottom: 10px;
+        }
+
+        .ceo-text {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
+
+        .name-text {
+            font-size: 1.2rem;
+            font-family: 'Times New Roman', serif;
+            font-weight: bold;
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <h1>أذكار المسلم</h1>
-    
-    <div class="zekr-box" onclick="count(this)">
-        <p>سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</p>
-        <span class="counter">0</span>
+
+    <div class="content">
+        <h1>الورد اليومي</h1>
+        
+        <div class="ward-box">
+            <span class="ward-number">١</span>
+            <span class="ward-text">الجزء الأول</span>
+        </div>
+
+        <a href="index.html" class="back-btn">العودة للرئيسية</a>
     </div>
 
-    <div class="zekr-box" onclick="count(this)">
-        <p>أستغفر الله وأتوب إليه</p>
-        <span class="counter">0</span>
-    </div>
+    <footer>
+        <div class="ceo-text">CEO-Co-Founder</div>
+        <div class="name-text">Houda</div>
+    </footer>
 
-    <a href="index.html" class="back-btn">العودة للرئيسية</a>
-
-    <script>
-        function count(element) {
-            let counterSpan = element.querySelector('.counter');
-            let current = parseInt(counterSpan.innerText);
-            counterSpan.innerText = current + 1;
-        }
-    </script>
 </body>
 </html>
