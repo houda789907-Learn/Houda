@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Houda Edition | السماء الروحانية</title>
+    <title>Houda Edition | أذكار الصباح</title>
     <style>
         :root { 
             --gold: #d4af37; 
-            --deep-sky: #0a192f; /* سماوي غامق جداً وفخم */
+            --deep-sky: #0a192f; 
             --night-blue: #020c1b;
             --white: #ffffff;
         }
@@ -19,7 +19,7 @@
             font-family: 'Segoe UI', sans-serif; overflow: hidden;
         }
 
-        /* 1. النجوم الصغيرة (Stars Canvas) */
+        /* النجوم */
         #stars-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 0; pointer-events: none;
@@ -29,7 +29,7 @@
             opacity: 0.5; animation: twinkle var(--duration) infinite ease-in-out;
         }
 
-        /* 2. الأدعية العائمة (Floating Duas) */
+        /* الأدعية العائمة */
         .floating-dua {
             position: fixed; bottom: -60px; 
             color: rgba(255, 255, 255, 0.9);
@@ -37,10 +37,9 @@
             text-shadow: 0 0 10px rgba(255,255,255,0.4);
             pointer-events: none; 
             animation: floatUp 14s linear infinite;
-            z-index: 5; white-space: nowrap;
+            z-index: 5;
         }
 
-        /* المحتوى الرئيسي */
         #app {
             display: flex; flex-direction: column; height: 100vh;
             justify-content: space-between; align-items: center; padding: 40px 20px;
@@ -48,14 +47,15 @@
             position: relative; z-index: 10;
         }
 
+        /* تعديل الدوائر لتبديل الورد بأذكار الصباح */
         .nav-circles { display: flex; gap: 20px; }
         .nav-circles a {
-            width: 85px; height: 85px; 
+            width: 100px; height: 100px; 
             border: 1.5px solid var(--gold);
             background: rgba(212, 175, 55, 0.05);
             border-radius: 50%; display: flex; justify-content: center;
             align-items: center; text-decoration: none; color: var(--gold);
-            font-weight: bold; transition: 0.3s;
+            font-weight: bold; transition: 0.3s; text-align: center; font-size: 0.9rem;
         }
 
         .emo-btn {
@@ -64,16 +64,10 @@
             cursor: pointer; font-weight: bold; margin: 5px;
         }
 
-        #ayah-display {
-            margin-top: 25px; font-size: 1.2rem; font-weight: bold;
-            color: var(--gold); min-height: 50px;
-        }
-
         footer { text-align: center; width: 100%; padding-bottom: 20px; }
         .ceo-sign { font-size: 0.65rem; letter-spacing: 4px; color: var(--gold); opacity: 0.8; }
         .ceo-name { font-size: 1.6rem; font-family: 'Times New Roman', serif; font-weight: bold; color: var(--gold); }
 
-        /* الأنميشن */
         @keyframes floatUp {
             from { transform: translateY(0) scale(0.9); opacity: 0; }
             10% { opacity: 1; }
@@ -93,8 +87,8 @@
 
     <div id="app">
         <div class="nav-circles">
-            <a href="ward.html">الورد</a>
-            <a href="azkar.html">الأذكار</a>
+            <a href="morning_azkar.html">أذكار<br>الصباح</a>
+            <a href="azkar.html">الأذكار<br>العامة</a>
         </div>
 
         <div class="main-content">
@@ -106,7 +100,7 @@
                 <button class="emo-btn" onclick="feel('tired')">متعب</button>
                 <button class="emo-btn" onclick="feel('happy')">فرحان</button>
             </div>
-            <div id="ayah-display"></div>
+            <div id="ayah-display" style="margin-top: 25px; color: var(--gold); font-weight: bold;"></div>
         </div>
 
         <footer>
@@ -116,7 +110,7 @@
     </div>
 
     <script>
-        // 1. توليد النجوم عشوائياً
+        // توليد النجوم
         const starsContainer = document.getElementById('stars-container');
         for (let i = 0; i < 80; i++) {
             const star = document.createElement('div');
@@ -130,8 +124,8 @@
             starsContainer.appendChild(star);
         }
 
-        // 2. الأدعية العائمة
-        const duas = ["سُبْحَانَ اللَّهِ و بحمده", "سبحان الله العظيم", "الْحَمْدُ لِلَّهِ", "لَا إِلَهَ إِلَّا اللَّهُ", "اللَّهُ أَكْبَرُ", "أستغفر الله", "اللهم صلِّ على محمد"];
+        // الأدعية العائمة
+        const duas = ["أصبحنا وأصبح الملك لله", "يا حي يا قيوم", "اللهم بك أصبحنا", "لا إله إلا الله"];
         function createFloatingDua() {
             const div = document.createElement('div');
             div.className = 'floating-dua';
@@ -140,21 +134,16 @@
             document.body.appendChild(div);
             setTimeout(() => div.remove(), 14000);
         }
-        setInterval(createFloatingDua, 3500);
-
-        const responses = {
-            sad: "﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾",
-            tired: "﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾",
-            happy: "﴿وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَىٰ﴾"
-        };
+        setInterval(createFloatingDua, 4000);
 
         function feel(type) {
             const display = document.getElementById('ayah-display');
-            display.style.opacity = 0;
-            setTimeout(() => {
-                display.innerText = responses[type];
-                display.style.opacity = 1;
-            }, 300);
+            const responses = {
+                sad: "﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾",
+                tired: "﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾",
+                happy: "﴿وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَىٰ﴾"
+            };
+            display.innerText = responses[type];
         }
     </script>
 </body>
