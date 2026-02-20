@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق اذكاري | موسوعة الأذكار</title>
+    <title>تطبيق اذكاري | الأذكار</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -24,7 +24,6 @@
             color: var(--white); font-family: 'Segoe UI', sans-serif; overflow: hidden;
         }
 
-        /* زرار الـ 3 شرط */
         .menu-btn {
             position: fixed; top: 20px; right: 20px;
             font-size: 1.8rem; color: var(--gold);
@@ -34,8 +33,7 @@
             border: 2px solid var(--gold);
         }
 
-        /* القائمة الجانبية */
-        .side-menu {  
+        .side-menu {
             position: fixed; top: 0; right: -280px;
             width: 260px; height: 100%;
             background: var(--night-blue);
@@ -49,15 +47,11 @@
             padding: 15px 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.1);
             font-size: 1.1rem; text-align: right;
         }
-        .side-menu a:hover { background: var(--gold); color: var(--night-blue); }
 
         .overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.7); display: none; z-index: 9998;
         }
-
-        #stars-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
-        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--duration) infinite; }
 
         #app {
             display: flex; flex-direction: column; height: 100vh;
@@ -65,28 +59,28 @@
             position: relative; z-index: 10; text-align: center;
         }
 
-        .main-title { font-size: 2.8rem; color: var(--gold); margin-bottom: 5px; text-shadow: 0 0 15px rgba(212,175,55,0.4); }
+        .main-title { font-size: 2.5rem; color: var(--gold); margin-bottom: 5px; }
         
-        /* مربع التاريخ */
         #ramadan-date {
-            font-size: 1.4rem; color: var(--gold);
+            font-size: 1.3rem; color: var(--gold);
             background: rgba(212, 175, 55, 0.1);
-            padding: 10px 30px; border-radius: 25px;
-            border: 1px double var(--gold);
-            margin-bottom: 20px; font-weight: bold;
+            padding: 8px 25px; border-radius: 20px;
+            border: 1px solid var(--gold); margin-bottom: 20px;
         }
 
-        .floating-dua {
-            position: fixed; bottom: -100px; color: rgba(255,255,255,0.7);
-            font-size: 1.1rem; font-weight: bold; width: 100%; text-align: center;
-            animation: floatUp 15s linear infinite;
+        /* بطاقة آية اليوم */
+        .ayah-card {
+            margin: 20px; padding: 15px; max-width: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px; border: 1px dashed var(--gold);
         }
-
-        @keyframes floatUp { from { transform: translateY(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } to { transform: translateY(-115vh); opacity: 0; } }
-        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
         footer { position: absolute; bottom: 20px; width: 100%; }
-        .ceo-name { color: var(--gold); font-size: 1.5rem; font-weight: bold; letter-spacing: 3px; }
+        .ceo-name { color: var(--gold); font-size: 1.4rem; font-weight: bold; letter-spacing: 2px; }
+
+        #stars-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--duration) infinite; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -96,22 +90,25 @@
 
     <div class="side-menu" id="sideMenu">
         <a href="index.html">🏠 الرئيسية</a>
-        <a href="morning.html">☀️ أذكار الصباح</a>
-        <a href="evening.html">🌙 أذكار المساء</a>
-        <a href="istikhara.html">💍 دعاء الاستخارة</a>
-        <a href="worry.html">😔 أدعية الهم والحزن</a>
-        <a href="ramadan.html">🌙 أدعية رمضان</a>
-        <a href="tasks.html">✅ ورد المحاسبة اليومي</a>
+        <a href="#" onclick="enableNotifications()" style="color: #4ade80;">🔔 تفعيل الإشعارات</a>
+        <a href="morning.html">☀️ أذكار الصباح</a>
+        <a href="evening.html">🌙 أذكار المساء</a>
+        <a href="istikhara.html">💍 دعاء الاستخارة</a>
+        <a href="worry.html">😔 أدعية الهم والحزن</a>
+        <a href="ramadan.html">🌙 أدعية رمضان</a>
+        <a href="tasks.html">✅ ورد المحاسبة اليومي</a>
     </div>
 
     <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
     <div id="app">
         <h1 class="main-title">رمضان كريم</h1>
-        
-        <div id="ramadan-date">جاري الضبط...</div>
+        <div id="ramadan-date">جاري التحميل...</div>
 
-        <div id="quote" style="color: white; opacity: 0.8; font-size: 1.2rem;"></div>
+        <div class="ayah-card">
+            <small style="color: var(--gold);">✨ آية لقلبك</small>
+            <p id="ayah-text" style="font-size: 1.1rem; margin-top: 10px;">﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾</p>
+        </div>
 
         <footer>
             <div style="font-size: 0.7rem; color: var(--gold); opacity: 0.6;">CEO-CO-FOUNDER</div>
@@ -120,6 +117,7 @@
     </div>
 
     <script>
+        // 1. فتح المنيو
         function toggleMenu() {
             const menu = document.getElementById('sideMenu');
             const overlay = document.getElementById('overlay');
@@ -127,34 +125,48 @@
             overlay.style.display = menu.classList.contains('open') ? 'block' : 'none';
         }
 
-        // كود التاريخ الهجري الذكي والمعدل
-        function updateHijriDate() {
-            try {
-                const today = new Date();
-                
-                // إضافة يوم واحد عشان يظبط معاك (1 رمضان)
-                today.setDate(today.getDate() + 1);
-
-                const options = { day: 'numeric', month: 'long', year: 'numeric' };
-                let hijriDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', options).format(today);
-                
-                // تأكيد كتابة "رمضان" لو الموبايل قلب ميلادي
-                if (hijriDate.includes('فبراير') || hijriDate.includes('February')) {
-                    // حساب اليوم يدوياً لو الخاصية مش مدعومة في المتصفح
-                    let day = today.getDate() - 18; // عملية حسابية تقريبية لرمضان 1447
-                    document.getElementById('ramadan-date').innerText = day + " رمضان 1447 هـ";
-                } else {
-                    document.getElementById('ramadan-date').innerText = hijriDate;
-                }
-            } catch (e) {
-                document.getElementById('ramadan-date').innerText = "2 رمضان 1447 هـ";
-            }
+        // 2. التاريخ الهجري التلقائي
+        function updateDate() {
+            const today = new Date();
+            // تعديل بسيط ليوافق رمضان 1447هـ
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            const hijriDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', options).format(today);
+            document.getElementById('ramadan-date').innerText = hijriDate;
         }
-        updateHijriDate();
 
-        // نجوم
+        // 3. تفعيل الإشعارات (للمستخدمين اللي نزلوا التطبيق)
+        function enableNotifications() {
+            if (!("Notification" in window)) {
+                alert("متصفحك لا يدعم الإشعارات");
+                return;
+            }
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    navigator.serviceWorker.ready.then(reg => {
+                        reg.showNotification('تم التفعيل يا حوده! ✅', {
+                            body: 'ستصلك الأذكار تلقائياً حتى والتطبيق مقفول.',
+                            icon: 'icon.png'
+                        });
+                    });
+                }
+            });
+        }
+
+        // 4. آية اليوم المتغيرة
+        function setDailyAyah() {
+            const ayat = [
+                "﴿وَبَشِّرِ الصَّابِرِينَ﴾",
+                "﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾",
+                "﴿لَا تَدْرِي لَعَلَّ اللَّهَ يُحْدِثُ بَعْدَ ذَلِكَ أَمْرًا﴾",
+                "﴿وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَىٰ﴾"
+            ];
+            const day = new Date().getDate();
+            document.getElementById('ayah-text').innerText = ayat[day % ayat.length];
+        }
+
+        // 5. توليد النجوم
         const container = document.getElementById('stars-container');
-        for (let i = 0; i < 80; i++) {
+        for (let i = 0; i < 60; i++) {
             const star = document.createElement('div');
             star.className = 'star';
             star.style.width = Math.random() * 3 + 'px';
@@ -165,20 +177,15 @@
             container.appendChild(star);
         }
 
-        // أدعية
-        const duas = ["سبحان الله", "الحمد لله", "أستغفر الله", "اللهم صلِّ على محمد"];
-        function spawnDua() {
-            const d = document.createElement('div');
-            d.className = 'floating-dua';
-            d.innerText = duas[Math.floor(Math.random() * duas.length)];
-            d.style.left = Math.random() * 60 + 20 + '%';
-            document.body.appendChild(d);
-            setTimeout(() => d.remove(), 15000);
-        }
-        setInterval(spawnDua, 4500);
-
-        const quotes = ["﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾", "﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾"];
-        document.getElementById('quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
+        // تشغيل كل الوظائف عند التحميل
+        window.onload = () => {
+            updateDate();
+            setDailyAyah();
+            // تسجيل الـ Service Worker للإشعارات
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js');
+            }
+        };
     </script>
 </body>
 </html>
