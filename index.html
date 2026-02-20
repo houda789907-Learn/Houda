@@ -3,145 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رمضان كريم | Houda Edition</title>
+    <title>رمضان 2026 | Houda Platform</title>
     <style>
-        :root { --gold: #d4af37; --black: #0a0a0a; --glow: rgba(212, 175, 55, 0.3); }
-        
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            background-color: var(--black); color: var(--gold);
-            font-family: 'Segoe UI', sans-serif; overflow: hidden;
-            transition: background 0.5s ease;
+        :root {
+            --gold: #d4af37;
+            --bg-color: #0a0a0a; /* سيتغير تلقائياً */
+            --accent: rgba(212, 175, 55, 0.4);
         }
 
-        /* 1. الفانوس المنير (في الزاوية) */
-        #lantern {
-            position: fixed; top: 20px; left: 20px;
-            font-size: 30px; cursor: pointer; filter: drop-shadow(0 0 5px var(--gold));
-            z-index: 100; transition: 0.3s;
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: var(--bg-color);
+            color: var(--gold);
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden;
+            transition: background 2s ease; /* لتغيير لون الوقت بسلاسة */
         }
-        #lantern.active { filter: drop-shadow(0 0 20px var(--gold)); transform: scale(1.2); }
+
+        /* 1. تأثير وقت اليوم (Dynamic Time UI) */
+        .time-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: -1;
+            opacity: 0.5;
+        }
+
+        /* 2. بوصلة القلوب (الزخرفة المتحركة) */
+        #qibla-compass {
+            position: absolute; top: 20%; left: 50%;
+            transform: translateX(-50%);
+            width: 150px; height: 150px;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            transition: transform 0.1s ease;
+        }
+        #qibla-compass::after {
+            content: '▲'; position: absolute; top: -10px; font-size: 12px;
+        }
 
         /* شاشة الترحيب */
-        #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--black); display: flex; justify-content: center;
-            align-items: center; z-index: 9999; transition: 0.8s;
-        }
-        .pentagon {
-            position: absolute; width: 200px; height: 200px; background: var(--gold);
-            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-            opacity: 0.4; animation: pulse 2s infinite;
+        #splash {
+            position: fixed; top: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            transition: 1s;
         }
 
-        /* المحتوى الرئيسي */
-        #main-content {
+        /* المحتوى */
+        #main-app {
             display: none; height: 100vh; flex-direction: column;
-            justify-content: space-between; align-items: center; padding: 20px;
-            box-sizing: border-box; text-align: center;
+            justify-content: space-between; align-items: center; padding: 30px;
+            box-sizing: border-box; z-index: 10;
         }
 
-        .header-circles { display: flex; gap: 20px; margin-top: 40px; }
-        .circle {
-            width: 100px; height: 100px; border: 2px solid var(--gold);
+        .nav-circles { display: flex; gap: 20px; }
+        .nav-circles a {
+            width: 90px; height: 90px; border: 2px solid var(--gold);
             border-radius: 50%; display: flex; justify-content: center;
-            align-items: center; color: var(--gold); text-decoration: none; font-weight: bold;
+            align-items: center; text-decoration: none; color: var(--gold);
+            font-weight: bold; font-size: 0.8rem;
+            box-shadow: 0 0 15px var(--accent);
         }
 
-        /* 2. هدية اليوم (الهلال) */
-        .gift-section { margin-top: 30px; }
-        #moon-gift {
-            font-size: 50px; cursor: pointer; display: inline-block;
-            transition: 0.5s; animation: float 3s infinite ease-in-out;
+        /* 3. خريطة نور العمل (Heatmap) */
+        .heatmap {
+            display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px;
+            margin-top: 20px;
         }
-        #gift-text {
-            margin-top: 15px; font-size: 1.1rem; min-height: 50px;
-            max-width: 300px; color: #fff; display: none;
-        }
+        .dot { width: 8px; height: 8px; background: #222; border-radius: 2px; }
+        .dot.active { background: var(--gold); box-shadow: 0 0 5px var(--gold); }
 
-        /* 3. شريط الإنجاز */
-        .progress-container { width: 80%; max-width: 300px; background: #222; height: 4px; border-radius: 10px; margin: 20px 0; }
-        #progress-bar { width: 30%; height: 100%; background: var(--gold); border-radius: 10px; box-shadow: 0 0 10px var(--gold); transition: 1s; }
+        footer { text-align: center; padding-bottom: 20px; }
+        .ceo-sign { font-size: 0.7rem; letter-spacing: 3px; opacity: 0.6; }
+        .ceo-name { font-size: 1.5rem; font-family: serif; font-weight: bold; }
 
-        footer { margin-bottom: 20px; }
-        .name-text { font-size: 1.5rem; font-family: serif; font-weight: bold; }
-
-        /* الأنميشن */
-        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.1); opacity: 0.5; } }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     </style>
 </head>
-<body id="body">
+<body id="main-body">
 
-    <div id="lantern" onclick="toggleLight()">🏮</div>
-
-    <div id="splash-screen">
-        <div class="pentagon"></div>
-        <div style="z-index:10; font-size: 2rem; font-weight: bold;">أهلاً رمضان</div>
+    <div id="splash">
+        <div style="text-align:center;">
+            <div id="loader-pentagon" style="font-size: 50px;">🌙</div>
+            <h2 style="color:var(--gold)">Houda Edition</h2>
+        </div>
     </div>
 
-    <div id="main-content">
-        <div class="header-circles">
-            <a href="ward.html" class="circle">الورد اليومي</a>
-            <a href="azkar.html" class="circle">الأذكار</a>
+    <div id="main-app">
+        <div id="qibla-compass">
+            <div style="font-size: 0.6rem; text-align: center;">بوصلة<br>القلوب</div>
         </div>
 
-        <div class="gift-section">
-            <div id="moon-gift" onclick="openGift()">🌙</div>
-            <div id="gift-text">"وَتَزَوَّدُوا فَإِنَّ خَيْرَ الزَّادِ التَّقْوَىٰ"</div>
+        <div class="nav-circles">
+            <a href="ward.html">الورد</a>
+            <a href="azkar.html">الأذكار</a>
         </div>
 
-        <div class="status-container">
-            <div style="font-size: 2rem;">2 رمضان</div>
-            <div class="progress-container">
-                <div id="progress-bar"></div>
-            </div>
-            <div style="font-size: 0.8rem; opacity: 0.6;">إنجازك اليومي</div>
+        <div class="status">
+            <h1 id="time-greeting">رمضان كريم</h1>
+            <p id="day-num">2 رمضان</p>
+            
+            <div class="heatmap" id="heatmap">
+                </div>
+            <p style="font-size: 0.6rem; margin-top: 10px;">خريطة نور العمل</p>
         </div>
 
         <footer>
-            <div style="font-size: 0.7rem; letter-spacing: 2px;">CEO-Co-Founder</div>
-            <div class="name-text">Houda</div>
+            <div class="ceo-sign">CEO-CO-FOUNDER</div>
+            <div class="ceo-name">Houda</div>
         </footer>
     </div>
 
     <script>
-        // 1. إخفاء شاشة الترحيب
-        setTimeout(() => {
-            document.getElementById('splash-screen').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('splash-screen').style.display = 'none';
-                document.getElementById('main-content').style.display = 'flex';
-            }, 800);
-        }, 2000);
+        // 1. نظام الوقت المتغير (Dynamic Time UI)
+        function updateTimeStyle() {
+            const hour = new Date().getHours();
+            const body = document.getElementById('main-body');
+            const greeting = document.getElementById('time-greeting');
 
-        // 2. كود الفانوس (تغيير إضاءة الموقع)
-        function toggleLight() {
-            const body = document.getElementById('body');
-            const lantern = document.getElementById('lantern');
-            lantern.classList.toggle('active');
-            if(lantern.classList.contains('active')) {
-                body.style.background = "radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%)";
-            } else {
-                body.style.background = "#0a0a0a";
+            if (hour >= 5 && hour < 12) { // الصباح
+                body.style.backgroundColor = "#1a1a2e"; // أزرق صبحي
+                greeting.innerText = "صباح الذاكرين";
+            } else if (hour >= 12 && hour < 17) { // الظهر
+                body.style.backgroundColor = "#2c1e0a"; // بني ذهبي
+                greeting.innerText = "طاب يومك بالخير";
+            } else if (hour >= 17 && hour < 19) { // قبل المغرب
+                body.style.backgroundColor = "#3d1111"; // أرجواني مغربي
+                greeting.innerText = "اقترب الإفطار";
+            } else { // الليل
+                body.style.backgroundColor = "#050505"; // أسود ليل
+                greeting.innerText = "ليلة مباركة";
             }
         }
 
-        // 3. كود هدية اليوم
-        function openGift() {
-            const moon = document.getElementById('moon-gift');
-            const text = document.getElementById('gift-text');
-            moon.style.transform = "rotate(360deg) scale(0)";
-            setTimeout(() => {
-                moon.style.display = "none";
-                text.style.display = "block";
-            }, 500);
+        // 2. بوصلة القلوب (استخدام الجيروسكوب)
+        window.addEventListener('deviceorientation', (event) => {
+            const compass = document.getElementById('qibla-compass');
+            if(event.webkitCompassHeading) {
+                // للآيفون
+                compass.style.transform = `translateX(-50%) rotate(${event.webkitCompassHeading}deg)`;
+            } else {
+                // للأندرويد
+                compass.style.transform = `translateX(-50%) rotate(${event.alpha}deg)`;
+            }
+        });
+
+        // 3. خريطة نور العمل (توليد نقاط الشهر)
+        const heatmap = document.getElementById('heatmap');
+        for(let i=0; i<30; i++) {
+            let dot = document.createElement('div');
+            dot.className = 'dot';
+            if(i < 2) dot.className = 'dot active'; // اليوم هو 2 رمضان
+            heatmap.appendChild(dot);
         }
 
-        // محاكاة لشريط الإنجاز (يمكنك ربطه لاحقاً ببيانات حقيقية)
+        // إخفاء الترحيب
         setTimeout(() => {
-            document.getElementById('progress-bar').style.width = "65%";
-        }, 3000);
+            document.getElementById('splash').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('splash').style.display = 'none';
+                document.getElementById('main-app').style.display = 'flex';
+                updateTimeStyle();
+            }, 800);
+        }, 2000);
+
+        // 4. ميزة الهزاز (ستحتاج تفعيلها في صفحة الأذكار)
+        function triggerVibration() {
+            if ("vibrate" in navigator) {
+                navigator.vibrate(50); // يهتز لمدة 50 مللي ثانية
+            }
+        }
     </script>
 </body>
 </html>
