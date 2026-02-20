@@ -3,23 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الورد اليومي</title>
+    <title>الورد اليومي - المصحف الشريف</title>
     <style>
-        body { background-color: #0a0a0a; color: #d4af37; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 20px; }
-        .container { border: 2px solid #d4af37; padding: 20px; border-radius: 15px; max-width: 500px; margin: auto; }
-        h1 { border-bottom: 1px solid #d4af37; padding-bottom: 10px; }
-        .back-btn { display: inline-block; margin-top: 20px; color: #0a0a0a; background: #d4af37; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; }
-        p { font-size: 1.5rem; line-height: 2; }
+        :root {
+            --gold: #d4af37;
+            --black: #0a0a0a;
+        }
+        body { 
+            background-color: var(--black); 
+            color: var(--gold); 
+            font-family: 'Segoe UI', sans-serif; 
+            text-align: center; 
+            margin: 0;
+            padding: 10px;
+        }
+        .container { 
+            max-width: 900px; 
+            margin: auto; 
+        }
+        h1 { margin-bottom: 10px; font-size: 1.8rem; }
+        
+        /* إطار المصحف */
+        .quran-frame {
+            width: 100%;
+            height: 70vh; /* يأخذ 70% من طول الشاشة */
+            border: 2px solid var(--gold);
+            border-radius: 10px;
+            background: white; /* خلفية بيضاء لسهولة القراءة */
+        }
+
+        .back-btn { 
+            display: inline-block; 
+            margin: 15px 0; 
+            color: var(--black); 
+            background: var(--gold); 
+            padding: 8px 25px; 
+            text-decoration: none; 
+            border-radius: 50px; 
+            font-weight: bold; 
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>الورد اليومي</h1>
-        <p>قال تعالى: "فَاصْبِرْ عَلَىٰ مَا يَقُولُونَ وَسَبِّحْ بِحَمْدِ رَبِّكَ قَبْلَ طُلُوعِ الشَّمْسِ وَقَبْلَ غُرُوبِهَا"</p>
-        <div style="margin-top: 30px; font-size: 1.2rem;">
-            ورد اليوم: (سورة البقرة - من الآية 1 إلى 50)
-        </div>
+        <h1>المصحف الشريف</h1>
+        
+        <iframe class="quran-frame" 
+                src="https://quran.ksu.edu.sa/m.php?l=ar#aya=1_1" 
+                title="القرآن الكريم">
+        </iframe>
+
+        <br>
         <a href="index.html" class="back-btn">العودة للرئيسية</a>
+        
+        <footer style="margin-top: 20px; font-size: 0.8rem; opacity: 0.6;">
+            CEO-Co-Founder | Houda
+        </footer>
     </div>
 </body>
 </html>
