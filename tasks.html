@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورد المحاسبة | Houda Edition</title>
+    <style>
+        :root { 
+            --gold: #d4af37; 
+            --deep-sky: #0a192f; 
+            --night-blue: #020c1b;
+            --white: #ffffff;
+            --success: #28a745;
+        }
+        
+        body { 
+            background: radial-gradient(circle at center, var(--deep-sky) 0%, var(--night-blue) 100%); 
+            color: var(--white); font-family: 'Segoe UI', sans-serif; 
+            margin: 0; padding: 20px; min-height: 100vh;
+        }
+
+        .container { max-width: 500px; margin: 0 auto; text-align: center; }
+
+        h1 { color: var(--gold); margin-bottom: 10px; }
+        .subtitle { opacity: 0.8; font-size: 0.9rem; margin-bottom: 25px; }
+
+        /* شريط الإنجاز */
+        .progress-container {
+            background: rgba(255,255,255,0.1);
+            height: 10px; border-radius: 5px; margin-bottom: 30px; overflow: hidden;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        #progress-bar {
+            background: var(--gold); width: 0%; height: 100%; transition: 0.5s;
+            box-shadow: 0 0 10px var(--gold);
+        }
+
+        /* قائمة المهام */
+        .task-list { text-align: right; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; border: 1px solid var(--gold); }
+        
+        .task-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 15px 0; border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            cursor: pointer;
+        }
+        .task-item:last-child { border: none; }
+        
+        .task-text { font-size: 1.1rem; flex-grow: 1; margin-right: 15px; }
+
+        /* تصميم الـ Checkbox */
+        input[type="checkbox"] {
+            width: 25px; height: 25px; cursor: pointer;
+            accent-color: var(--gold);
+        }
+
+        /* رسالة التحفيز */
+        #motivational-msg {
+            display: none; margin-top: 25px; padding: 20px;
+            background: rgba(40, 167, 69, 0.2); border: 2px solid var(--success);
+            border-radius: 15px; animation: bounce 1s infinite alternate;
+        }
+
+        @keyframes bounce { from { transform: scale(1); } to { transform: scale(1.05); } }
+
+        .back-btn {
+            display: block; width: fit-content; margin: 30px auto;
+            color: var(--gold); text-decoration: none;
+            border: 1px solid var(--gold); padding: 10px 30px; border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>✅ ورد المحاسبة</h1>
+        <p class="subtitle">"حاسبوا أنفسكم قبل أن تحاسبوا"</p>
+
+        <div class="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+
+        <div class="task-list">
+            <div class="task-item"><span class="task-text">صلاة الفجر</span> <input type="checkbox" onchange="updateProgress()"></div>
+            <div class="task-item"><span class="task-text">صلاة الظهر</span> <input type="checkbox" onchange="updateProgress()"></div>
+            <div class="task-item"><span class="task-text">صلاة العصر</span> <input type="checkbox" onchange="updateProgress()"></div>
+            <div class="task-item"><span class="task-text">صلاة المغرب</span> <input type="checkbox" onchange="updateProgress()"></div>
+            <div class="task-item"><span class="task-text">صلاة العشاء</span> <input type="checkbox" onchange="updateProgress()"></div>
+            
+            <div class="task-item"><span class="task-text">صلاة التراويح</span> <input type="checkbox" onchange="updateProgress()"></div>
+            <div class="task-item"><span class="task-text">أذكار الصباح</span> <input type="checkbox" onchange="updateProgress()"></div>
+            <div class="task-item"><span class="task-text">أذكار المساء</span> <input type="checkbox" onchange="updateProgress()"></div>
+            <div class="task-item"><span class="task-text">ورد القرآن اليومي</span> <input type="checkbox" onchange="updateProgress()"></div>
+        </div>
+
+        <div id="motivational-msg">
+            <h2 style="color: #4ade80; margin: 0;">ما شاء الله يا بطل! 😍</h2>
+            <p style="margin: 10px 0 0;">لقد أتممت وردك اليومي كاملاً.. تقبل الله منك صالح الأعمال. "كن فخور بنفسك!"</p>
+        </div>
+
+        <a href="index.html" class="back-btn">🏠 العودة للرئيسية</a>
+    </div>
+
+    <script>
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+            const progress = (checked.length / checkboxes.length) * 100;
+            
+            // تحديث شريط التقدم
+            document.getElementById('progress-bar').style.width = progress + '%';
+
+            // إظهار رسالة التحفيز لو خلص كله
+            const msg = document.getElementById('motivational-msg');
+            if (checked.length === checkboxes.length) {
+                msg.style.display = 'block';
+                // هز الموبايل لو خلص (اختياري)
+                if (navigator.vibrate) navigator.vibrate(200);
+            } else {
+                msg.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
