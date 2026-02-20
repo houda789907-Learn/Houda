@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الورد اليومي - المصحف الشريف</title>
+    <title>الورد اليومي - الجزء الأول</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -12,53 +12,100 @@
         body { 
             background-color: var(--black); 
             color: var(--gold); 
-            font-family: 'Segoe UI', sans-serif; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             text-align: center; 
             margin: 0;
-            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
         }
-        .container { 
-            max-width: 900px; 
-            margin: auto; 
-        }
-        h1 { margin-bottom: 10px; font-size: 1.8rem; }
         
-        /* إطار المصحف */
-        .quran-frame {
-            width: 100%;
-            height: 70vh; /* يأخذ 70% من طول الشاشة */
-            border: 2px solid var(--gold);
-            border-radius: 10px;
-            background: white; /* خلفية بيضاء لسهولة القراءة */
+        .content {
+            margin-top: 50px;
+        }
+
+        h1 { 
+            font-size: 2rem; 
+            border-bottom: 2px solid var(--gold); 
+            display: inline-block; 
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .ward-box {
+            border: 1px solid var(--gold);
+            padding: 40px 20px;
+            border-radius: 15px;
+            background: rgba(212, 175, 55, 0.05);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .ward-number {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .ward-text {
+            font-size: 1.5rem;
         }
 
         .back-btn { 
             display: inline-block; 
-            margin: 15px 0; 
+            margin-top: 30px; 
             color: var(--black); 
             background: var(--gold); 
-            padding: 8px 25px; 
+            padding: 10px 30px; 
             text-decoration: none; 
             border-radius: 50px; 
             font-weight: bold; 
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+        }
+
+        footer {
+            margin-bottom: 10px;
+        }
+
+        .ceo-text {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
+
+        .name-text {
+            font-size: 1.2rem;
+            font-family: 'Times New Roman', serif;
+            font-weight: bold;
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>المصحف الشريف</h1>
-        
-        <iframe class="quran-frame" 
-                src="https://quran.ksu.edu.sa/m.php?l=ar#aya=1_1" 
-                title="القرآن الكريم">
-        </iframe>
 
-        <br>
-        <a href="index.html" class="back-btn">العودة للرئيسية</a>
+    <div class="content">
+        <h1>الورد اليومي</h1>
         
-        <footer style="margin-top: 20px; font-size: 0.8rem; opacity: 0.6;">
-            CEO-Co-Founder | Houda
-        </footer>
+        <div class="ward-box">
+            <span class="ward-number">١</span>
+            <span class="ward-text">الجزء الأول</span>
+        </div>
+
+        <a href="index.html" class="back-btn">العودة للرئيسية</a>
     </div>
+
+    <footer>
+        <div class="ceo-text">CEO-Co-Founder</div>
+        <div class="name-text">Houda</div>
+    </footer>
+
 </body>
 </html>
