@@ -1,1 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أذكار المساء كاملة | Houda Edition</title>
+    <style>
+        :root { 
+            --gold: #d4af37; --deep-sky: #0a192f; --night-blue: #020c1b;
+            --white: #ffffff; --success: #2ecc71;
+        }
+        body { 
+            margin: 0; padding: 20px; text-align: center;
+            background: radial-gradient(circle at center, var(--deep-sky) 0%, var(--night-blue) 100%); 
+            color: var(--white); font-family: 'Segoe UI', sans-serif;
+        }
 
+        /* مربع الإنجاز الثابت */
+        .progress-box {
+            position: sticky; top: 10px; z-index: 100;
+            background: rgba(255, 255, 255, 0.1); border: 1px solid var(--white);
+            backdrop-filter: blur(10px); padding: 10px; border-radius: 15px;
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 5px; max-width: 90%; margin: 0 auto 20px; min-height: 40px;
+        }
+        .check-mark { font-size: 1rem; animation: popIn 0.4s ease; }
+
+        .azkar-list { max-width: 500px; margin: 0 auto; }
+        .zekr-card {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px; padding: 15px; margin-bottom: 12px; cursor: pointer;
+            transition: 0.3s; position: relative; text-align: justify;
+        }
+        .zekr-card.completed { border-color: var(--success); background: rgba(46, 204, 113, 0.1); opacity: 0.6; }
+        .zekr-text { font-size: 1rem; line-height: 1.6; display: block; margin-bottom: 10px; }
+        
+        .card-footer {
+            display: flex; justify-content: space-between; align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px; font-size: 0.8rem;
+        }
+        .count-btn { background: var(--gold); color: var(--night-blue); padding: 2px 10px; border-radius: 10px; font-weight: bold; }
+
+        @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+        .back-btn { color: var(--gold); text-decoration: none; display: block; margin: 20px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <div class="progress-box" id="progress-box">
+        <div style="width:100%; font-size:0.6rem; opacity:0.7;">إنجاز أذكار المساء:</div>
+    </div>
+
+    <h1 style="color:var(--gold); font-size: 1.5rem;">أذكار المساء كاملة</h1>
+
+    <div class="azkar-list">
+        <script>
+            const eveningAzkar = [
+                { t: "أعوذ بالله من الشيطان الرجيم (آية الكرسي)", r: 1 },
+                { t: "بسم الله الرحمن الرحيم (سورة الإخلاص)", r: 3 },
+                { t: "بسم الله الرحمن الرحيم (سورة الفلق)", r: 3 },
+                { t: "بسم الله الرحمن الرحيم (سورة الناس)", r: 3 },
+                { t: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ", r: 1 },
+                { t: "اللّهُـمَّ بِكَ أَمْسَـينا وَبِكَ أَصْـبَحْنا، وَبِكَ نَحْـيا وَبِكَ نَمـوتُ وَإِلَـيْكَ المَصـير", r: 1 },
+                { t: "اللّهـمَّ أَنْتَ رَبِّـي لا إلهَ إلاّ أَنْتَ، خَلَقْتَنـي وَأَنا عَبْـدُك، وَأَنا عَلـى عَهْـدِكَ وَوَعْـدِكَ ما اسْتَطَعْـت، أَعـوذُ بِكَ مِنْ شَرِّ ما صَنَـعْت، أَبـوءُ لَكَ بِنِعْـمَتِكَ عَلَـيَّ وَأَبـوءُ بِذَنْـبي فَاغْفِـرْ لي فَإِنَّـهُ لا يَغْفِـرُ الذُّنـوبَ إِلاّ أَنْتَ", r: 1 },
+                { t: "اللّهُـمَّ إِنِّـي أَمْسَـيْتُ أُشْـهِدُك، وَأُشْـهِدُ حَمَلَـةَ عَرْشِـك، وَمَلائِكَتِك، وَجَمـيعَ خَلْقِـك، أَنَّـكَ أَنْتَ اللهُ لا إلهَ إلاّ أَنْتَ وَحْـدَكَ لا شَرِيكَ لَـك، وَأَنَّ مُحَمَّـداً عَبْـدُكَ وَرَسـولُك", r: 4 },
+                { t: "اللّهُـمَّ ما أَمْسـى بي مِـنْ نِعْـمَةٍ أَو بِأَحَـدٍ مِـنْ خَلْقِـك، فَمِـنْكَ وَحْـدَكَ لا شريكَ لَـك، فَلَكَ الْحَمْـدُ وَلَكَ الشُّكْـر", r: 1 },
+                { t: "حَسْبِـيَ اللّهُ لا إلهَ إلاّ هُوَ عَلَـيْهِ تَوَكَّـلْتُ وَهُوَ رَبُّ العَرْشِ العَظـيم", r: 7 },
+                { t: "بِسـمِ اللهِ الذي لا يَضُـرُّ مَعَ اسمِـهِ شَيءٌ في الأرضِ وَلا في السّمـاءِ وَهُوَ السّمـيعُ العَلـيم", r: 3 },
+                { t: "اللّهُـمَّ عافِـني في بَدَنـي، اللّهُـمَّ عافِـني في سَمْـعي، اللّهُـمَّ عافِـني في بَصَـري، لا إلهَ إلاّ أَنْتَ", r: 3 },
+                { t: "اللّهُـمَّ إِنّـي أَعـوذُ بِكَ مِنَ الْكُـفْرِ وَالفَـقْر، وَأَعـوذُ بِكَ مِنْ عَذابِ القَـبْر، لا إلهَ إلاّ أَنْتَ", r: 3 },
+                { t: "اللّهُـمَّ إِنِّـي أسْـأَلُكَ العَـفْوَ وَالعـافِـيَةَ في الدُّنْـيا وَالآخِـرَة", r: 1 },
+                { t: "يا حَـيُّ يا قَيُّـومُ بِرَحْمَـتِكَ أَسْتَغـيث، أَصْلِـحْ لي شَـأْني كُلَّـه، وَلا تَكِلـني إِلى نَفْـسي طَرْفَةَ عَـيْن", r: 3 },
+                { t: "أَمْسَيْنا وَأَمْسَى المُلْكُ للهِ رَبِّ العالَمين، اللّهُمَّ إِنِّي أسْألُكَ خَيْرَ هذهِ اللَّيْلَةِ، فَتْحَها، وَنَصْرَها، وَنورَها وَبَرَكَتَها، وَهُداها", r: 1 },
+                { t: "أَمْسَيْنا عَلَى فِطْرَةِ الإسْلامِ، وَعَلَى كَلِمَةِ الإخْلاصِ، وَعَلَى دِينِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ", r: 1 },
+                { t: "أَعـوذُ بِكَلِمـاتِ اللهِ التّـامّـاتِ مِنْ شَرِّ ما خَلَـق", r: 3 },
+                { t: "اللّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ على نَبِيِّنَا مُحمَّد", r: 10 },
+                { t: "سُبْحـانَ اللهِ وَبِحَمْـدِهِ", r: 100 },
+                { t: "لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ", r: 100 },
+                { t: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ رَبِّ الْعَالَمِينَ، اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذِهِ اللَّيْلَةِ فَتْحَهَا وَنَصْرَهَا وَنُورَهَا وَبَرَكَتَهَا وَهُدَاهَا", r: 1 }
+            ];
+
+            const container = document.querySelector('.azkar-list');
+            eveningAzkar.forEach((z, i) => {
+                const card = document.createElement('div');
+                card.className = 'zekr-card';
+                card.onclick = function() { countMe(this, z.r); };
+                card.innerHTML = `
+                    <span class="zekr-text">${z.t}</span>
+                    <div class="card-footer">
+                        <span>مرات التكرار: ${z.r}</span>
+                        <span class="count-btn">0</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            function countMe(card, max) {
+                if(card.classList.contains('completed')) return;
+                let btn = card.querySelector('.count-btn');
+                let c = parseInt(btn.innerText);
+                if(c < max) {
+                    c++;
+                    btn.innerText = c;
+                    if(navigator.vibrate) navigator.vibrate(35);
+                    if(c === max) {
+                        card.classList.add('completed');
+                        const check = document.createElement('span');
+                        check.className = 'check-mark';
+                        check.innerText = '✅';
+                        document.getElementById('progress-box').appendChild(check);
+                        if(navigator.vibrate) navigator.vibrate([100,60,100]);
+                    }
+                }
+            }
+        </script>
+    </div>
+
+    <a href="index.html" class="back-btn">رجوع للرئيسية</a>
+
+    <footer>
+        <div style="font-size:0.5rem; letter-spacing:2px; opacity:0.6;">CEO-CO-FOUNDER</div>
+        <div style="font-weight:bold; color:var(--gold); font-size:1.2rem;">Houda</div>
+    </footer>
+</body>
+</html>
