@@ -3,41 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Houda Universe | رمضان 2026</title>
+    <title>Houda Edition | السماء الروحانية</title>
     <style>
         :root { 
             --gold: #d4af37; 
-            --sky-blue: #87CEEB; /* لون السماء */
-            --deep-sky: #00BFFF; 
+            --deep-sky: #0a192f; /* سماوي غامق جداً وفخم */
+            --night-blue: #020c1b;
             --white: #ffffff;
         }
         
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            /* خلفية متدرجة سماوية مريحة */
-            background: linear-gradient(180deg, var(--sky-blue) 0%, var(--deep-sky) 100%); 
+            background: radial-gradient(circle at center, var(--deep-sky) 0%, var(--night-blue) 100%); 
             color: var(--white);
             font-family: 'Segoe UI', sans-serif; overflow: hidden;
         }
 
-        /* 1. الأدعية العائمة (واضحة جداً الآن) */
-        .floating-dua {
-            position: fixed; bottom: -50px; 
-            color: var(--white);
-            font-size: 1.2rem; /* تكبير الخط للوضوح */
-            font-weight: bold;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2); /* ظل لجعلها بارزة */
-            pointer-events: none; 
-            animation: floatUp 12s linear infinite;
-            z-index: 5;
+        /* 1. النجوم الصغيرة (Stars Canvas) */
+        #stars-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
+        }
+        .star {
+            position: absolute; background: white; border-radius: 50%;
+            opacity: 0.5; animation: twinkle var(--duration) infinite ease-in-out;
         }
 
-        /* شاشة التحدي العلوي */
-        .social-counter {
-            position: fixed; top: 15px; right: 15px; 
-            font-size: 0.8rem; background: rgba(255,255,255,0.2);
-            padding: 5px 15px; border-radius: 20px;
-            backdrop-filter: blur(5px);
+        /* 2. الأدعية العائمة (Floating Duas) */
+        .floating-dua {
+            position: fixed; bottom: -60px; 
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem; font-weight: bold;
+            text-shadow: 0 0 10px rgba(255,255,255,0.4);
+            pointer-events: none; 
+            animation: floatUp 14s linear infinite;
+            z-index: 5; white-space: nowrap;
         }
 
         /* المحتوى الرئيسي */
@@ -50,53 +50,46 @@
 
         .nav-circles { display: flex; gap: 20px; }
         .nav-circles a {
-            width: 90px; height: 90px; 
-            border: 2px solid var(--white);
-            background: rgba(255,255,255,0.1);
+            width: 85px; height: 85px; 
+            border: 1.5px solid var(--gold);
+            background: rgba(212, 175, 55, 0.05);
             border-radius: 50%; display: flex; justify-content: center;
-            align-items: center; text-decoration: none; color: var(--white);
+            align-items: center; text-decoration: none; color: var(--gold);
             font-weight: bold; transition: 0.3s;
         }
-        .nav-circles a:hover { background: var(--white); color: var(--deep-sky); }
 
-        /* مساعد المشاعر */
-        .emotions-bar { display: flex; gap: 10px; margin-top: 20px; justify-content: center; }
         .emo-btn {
-            background: var(--white); border: none; color: var(--deep-sky);
-            padding: 8px 18px; border-radius: 20px; cursor: pointer; 
-            font-weight: bold; font-size: 0.8rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.1); border: 1px solid var(--gold); 
+            color: var(--gold); padding: 8px 18px; border-radius: 20px; 
+            cursor: pointer; font-weight: bold; margin: 5px;
         }
 
         #ayah-display {
-            margin-top: 25px; font-size: 1.3rem; font-weight: bold;
-            color: var(--white); text-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            min-height: 50px; padding: 0 20px;
+            margin-top: 25px; font-size: 1.2rem; font-weight: bold;
+            color: var(--gold); min-height: 50px;
         }
 
-        footer { text-align: center; border-top: 1px solid rgba(255,255,255,0.2); width: 100%; padding-top: 20px; }
-        .ceo-sign { font-size: 0.7rem; letter-spacing: 3px; color: var(--white); opacity: 0.8; }
-        .ceo-name { font-size: 1.8rem; font-family: 'Times New Roman', serif; font-weight: bold; color: var(--white); }
+        footer { text-align: center; width: 100%; padding-bottom: 20px; }
+        .ceo-sign { font-size: 0.65rem; letter-spacing: 4px; color: var(--gold); opacity: 0.8; }
+        .ceo-name { font-size: 1.6rem; font-family: 'Times New Roman', serif; font-weight: bold; color: var(--gold); }
 
+        /* الأنميشن */
         @keyframes floatUp {
-            from { transform: translateY(0) scale(0.8); opacity: 0; }
-            20% { opacity: 1; }
-            80% { opacity: 1; }
+            from { transform: translateY(0) scale(0.9); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
             to { transform: translateY(-110vh) scale(1.1); opacity: 0; }
         }
 
-        /* سحب بيضاء خفيفة في الخلفية */
-        .cloud {
-            position: absolute; background: white; border-radius: 50%;
-            filter: blur(50px); opacity: 0.3; z-index: -1;
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
         }
     </style>
 </head>
 <body>
 
-    <div class="cloud" style="width: 300px; height: 300px; top: 10%; left: -100px;"></div>
-    <div class="cloud" style="width: 400px; height: 400px; bottom: 10%; right: -100px;"></div>
-
-    <div class="social-counter">⚡ <span id="online-count">145</span> يسبحون معك الآن</div>
+    <div id="stars-container"></div>
 
     <div id="app">
         <div class="nav-circles">
@@ -105,8 +98,8 @@
         </div>
 
         <div class="main-content">
-            <h1 style="font-size: 2.5rem; margin-bottom: 5px;">رمضان كريم</h1>
-            <p style="opacity: 0.9;">2 رمضان 1447 هـ</p>
+            <h1 style="font-size: 2.2rem; color: var(--gold);">رمضان كريم</h1>
+            <p style="opacity: 0.8;">2 رمضان 1447 هـ</p>
             
             <div class="emotions-bar">
                 <button class="emo-btn" onclick="feel('sad')">قلق</button>
@@ -123,53 +116,46 @@
     </div>
 
     <script>
-        // مصفوفة الأدعية الواضحة
-        const duas = [
-            "سُبْحَانَ اللَّهِ", 
-            "الْحَمْدُ لِلَّهِ", 
-            "لَا إِلَهَ إِلَّا اللَّهُ", 
-            "اللَّهُ أَكْبَرُ", 
-            "اللَّهُمَّ بَلِّغْنَا رَمَضَانَ",
-            "أستغفر الله العظيم",
-            "اللهم صلِّ على محمد"
-        ];
+        // 1. توليد النجوم عشوائياً
+        const starsContainer = document.getElementById('stars-container');
+        for (let i = 0; i < 80; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 3 + 'px';
+            star.style.width = size;
+            star.style.height = size;
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+            starsContainer.appendChild(star);
+        }
 
+        // 2. الأدعية العائمة
+        const duas = ["سُبْحَانَ اللَّهِ", "الْحَمْدُ لِلَّهِ", "لَا إِلَهَ إِلَّا اللَّهُ", "اللَّهُ أَكْبَرُ", "أستغفر الله", "اللهم صلِّ على محمد"];
         function createFloatingDua() {
             const div = document.createElement('div');
             div.className = 'floating-dua';
             div.innerText = duas[Math.floor(Math.random() * duas.length)];
-            div.style.left = Math.random() * 70 + 15 + "%";
+            div.style.left = Math.random() * 80 + 10 + "%";
             document.body.appendChild(div);
-            
-            // مسح العنصر بعد انتهاء الأنميشن
-            setTimeout(() => div.remove(), 12000);
+            setTimeout(() => div.remove(), 14000);
         }
-
-        // إنشاء دعاء كل 3 ثواني ليكون المشهد مليئاً بالذكر
-        setInterval(createFloatingDua, 3000);
+        setInterval(createFloatingDua, 3500);
 
         const responses = {
             sad: "﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾",
             tired: "﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾",
-            happy: "﴿وَإِذْ تَأَذَّنَ رَبُّكُمْ لَئِن شَكَرْتُمْ لَأَزِيدَنَّكُمْ﴾"
+            happy: "﴿وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَىٰ﴾"
         };
 
         function feel(type) {
             const display = document.getElementById('ayah-display');
-            display.style.transform = "scale(0.8)";
             display.style.opacity = 0;
-            
             setTimeout(() => {
                 display.innerText = responses[type];
-                display.style.transform = "scale(1)";
                 display.style.opacity = 1;
             }, 300);
         }
-
-        // تحديث عداد المتواجدين بشكل عشوائي
-        setInterval(() => {
-            document.getElementById('online-count').innerText = Math.floor(Math.random() * (160 - 130) + 130);
-        }, 4000);
     </script>
 </body>
 </html>
