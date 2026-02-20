@@ -3,175 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رمضان 2026 | Houda Platform</title>
+    <title>Houda Universe | رمضان 2026</title>
     <style>
-        :root {
-            --gold: #d4af37;
-            --bg-color: #0a0a0a; /* سيتغير تلقائياً */
-            --accent: rgba(212, 175, 55, 0.4);
+        :root { --gold: #d4af37; --black: #050505; }
+        
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background: var(--black); color: var(--gold);
+            font-family: 'Segoe UI', sans-serif; overflow: hidden;
         }
 
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: var(--bg-color);
-            color: var(--gold);
-            font-family: 'Segoe UI', sans-serif;
-            overflow: hidden;
-            transition: background 2s ease; /* لتغيير لون الوقت بسلاسة */
+        /* 1. الفن التوليدي (Canvas الخلفية) */
+        #bg-canvas {
+            position: fixed; top: 0; left: 0; z-index: -1;
         }
 
-        /* 1. تأثير وقت اليوم (Dynamic Time UI) */
-        .time-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: -1;
-            opacity: 0.5;
+        /* 2. الأدعية العائمة (Floating Duas) */
+        .floating-dua {
+            position: fixed; bottom: -50px; color: rgba(212, 175, 55, 0.2);
+            font-size: 0.9rem; pointer-events: none; animation: floatUp 15s linear infinite;
         }
 
-        /* 2. بوصلة القلوب (الزخرفة المتحركة) */
-        #qibla-compass {
-            position: absolute; top: 20%; left: 50%;
-            transform: translateX(-50%);
-            width: 150px; height: 150px;
-            border: 1px solid var(--gold);
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            transition: transform 0.1s ease;
+        /* 3. مساعد المشاعر (Emotion AI UI) */
+        .emotions-bar {
+            display: flex; gap: 15px; margin-top: 20px;
         }
-        #qibla-compass::after {
-            content: '▲'; position: absolute; top: -10px; font-size: 12px;
+        .emo-btn {
+            background: none; border: 1px solid var(--gold); color: var(--gold);
+            padding: 5px 10px; border-radius: 20px; cursor: pointer; font-size: 0.7rem;
         }
 
-        /* شاشة الترحيب */
-        #splash {
-            position: fixed; top: 0; width: 100%; height: 100%;
-            background: #000; z-index: 9999;
-            display: flex; justify-content: center; align-items: center;
-            transition: 1s;
+        /* شاشة التحدي (Social Challenge) */
+        .social-counter {
+            position: fixed; top: 10px; right: 10px; font-size: 0.7rem; opacity: 0.6;
         }
 
-        /* المحتوى */
-        #main-app {
-            display: none; height: 100vh; flex-direction: column;
-            justify-content: space-between; align-items: center; padding: 30px;
-            box-sizing: border-box; z-index: 10;
+        /* التصميم العام */
+        #app {
+            display: flex; flex-direction: column; height: 100vh;
+            justify-content: space-between; align-items: center; padding: 40px 20px;
+            box-sizing: border-box; text-align: center;
         }
 
-        .nav-circles { display: flex; gap: 20px; }
         .nav-circles a {
-            width: 90px; height: 90px; border: 2px solid var(--gold);
+            width: 80px; height: 80px; border: 1px solid var(--gold);
             border-radius: 50%; display: flex; justify-content: center;
             align-items: center; text-decoration: none; color: var(--gold);
-            font-weight: bold; font-size: 0.8rem;
-            box-shadow: 0 0 15px var(--accent);
+            font-weight: bold; font-size: 0.8rem; margin: 0 10px;
         }
 
-        /* 3. خريطة نور العمل (Heatmap) */
-        .heatmap {
-            display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px;
-            margin-top: 20px;
+        footer { text-align: center; }
+        .ceo-name { font-size: 1.5rem; font-family: serif; font-weight: bold; display: block; }
+
+        @keyframes floatUp {
+            from { transform: translateY(0); opacity: 0; }
+            50% { opacity: 0.5; }
+            to { transform: translateY(-110vh); opacity: 0; }
         }
-        .dot { width: 8px; height: 8px; background: #222; border-radius: 2px; }
-        .dot.active { background: var(--gold); box-shadow: 0 0 5px var(--gold); }
-
-        footer { text-align: center; padding-bottom: 20px; }
-        .ceo-sign { font-size: 0.7rem; letter-spacing: 3px; opacity: 0.6; }
-        .ceo-name { font-size: 1.5rem; font-family: serif; font-weight: bold; }
-
     </style>
 </head>
-<body id="main-body">
+<body>
 
-    <div id="splash">
-        <div style="text-align:center;">
-            <div id="loader-pentagon" style="font-size: 50px;">🌙</div>
-            <h2 style="color:var(--gold)">Houda Edition</h2>
-        </div>
-    </div>
+    <canvas id="bg-canvas"></canvas>
 
-    <div id="main-app">
-        <div id="qibla-compass">
-            <div style="font-size: 0.6rem; text-align: center;">بوصلة<br>القلوب</div>
-        </div>
+    <div class="social-counter">هناك <span id="online-count">128</span> شخصاً يسبحون معك الآن ⚡</div>
 
-        <div class="nav-circles">
+    <div id="app">
+        <div class="nav-circles" style="display:flex;">
             <a href="ward.html">الورد</a>
             <a href="azkar.html">الأذكار</a>
         </div>
 
-        <div class="status">
-            <h1 id="time-greeting">رمضان كريم</h1>
-            <p id="day-num">2 رمضان</p>
+        <div class="main-content">
+            <h1 id="main-greeting">رمضان كريم</h1>
             
-            <div class="heatmap" id="heatmap">
-                </div>
-            <p style="font-size: 0.6rem; margin-top: 10px;">خريطة نور العمل</p>
+            <p style="font-size: 0.8rem;">كيف حال قلبك الآن؟</p>
+            <div class="emotions-bar">
+                <button class="emo-btn" onclick="feel('sad')">قلق</button>
+                <button class="emo-btn" onclick="feel('tired')">متعب</button>
+                <button class="emo-btn" onclick="feel('happy')">فرحان</button>
+            </div>
+            <div id="ayah-display" style="margin-top:20px; font-style: italic; min-height: 40px;"></div>
         </div>
 
         <footer>
-            <div class="ceo-sign">CEO-CO-FOUNDER</div>
-            <div class="ceo-name">Houda</div>
+            <div style="font-size: 0.6rem; letter-spacing: 3px;">CEO-CO-FOUNDER</div>
+            <span class="ceo-name">Houda</span>
         </footer>
     </div>
 
     <script>
-        // 1. نظام الوقت المتغير (Dynamic Time UI)
-        function updateTimeStyle() {
-            const hour = new Date().getHours();
-            const body = document.getElementById('main-body');
-            const greeting = document.getElementById('time-greeting');
+        // 1. كود الفن التوليدي (رسم خيوط ذهبية عشوائية)
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-            if (hour >= 5 && hour < 12) { // الصباح
-                body.style.backgroundColor = "#1a1a2e"; // أزرق صبحي
-                greeting.innerText = "صباح الذاكرين";
-            } else if (hour >= 12 && hour < 17) { // الظهر
-                body.style.backgroundColor = "#2c1e0a"; // بني ذهبي
-                greeting.innerText = "طاب يومك بالخير";
-            } else if (hour >= 17 && hour < 19) { // قبل المغرب
-                body.style.backgroundColor = "#3d1111"; // أرجواني مغربي
-                greeting.innerText = "اقترب الإفطار";
-            } else { // الليل
-                body.style.backgroundColor = "#050505"; // أسود ليل
-                greeting.innerText = "ليلة مباركة";
-            }
+        function drawArt() {
+            ctx.strokeStyle = 'rgba(212, 175, 55, 0.1)';
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+            ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+            ctx.stroke();
         }
+        setInterval(drawArt, 2000); // رسم خط كل ثانيتين
 
-        // 2. بوصلة القلوب (استخدام الجيروسكوب)
-        window.addEventListener('deviceorientation', (event) => {
-            const compass = document.getElementById('qibla-compass');
-            if(event.webkitCompassHeading) {
-                // للآيفون
-                compass.style.transform = `translateX(-50%) rotate(${event.webkitCompassHeading}deg)`;
-            } else {
-                // للأندرويد
-                compass.style.transform = `translateX(-50%) rotate(${event.alpha}deg)`;
-            }
-        });
-
-        // 3. خريطة نور العمل (توليد نقاط الشهر)
-        const heatmap = document.getElementById('heatmap');
-        for(let i=0; i<30; i++) {
-            let dot = document.createElement('div');
-            dot.className = 'dot';
-            if(i < 2) dot.className = 'dot active'; // اليوم هو 2 رمضان
-            heatmap.appendChild(dot);
+        // 2. كود الأدعية العائمة
+        const duas = ["سبحان الله", "الحمد لله", "اللهم إنك عفو تحب العفو فاعف عنا", "يا حي يا قيوم"];
+        function createFloatingDua() {
+            const div = document.createElement('div');
+            div.className = 'floating-dua';
+            div.innerText = duas[Math.floor(Math.random() * duas.length)];
+            div.style.left = Math.random() * 80 + 10 + "%";
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 15000);
         }
+        setInterval(createFloatingDua, 4000);
 
-        // إخفاء الترحيب
-        setTimeout(() => {
-            document.getElementById('splash').style.opacity = '0';
+        // 3. كود مساعد المشاعر (Emotion AI)
+        const responses = {
+            sad: "ألا بذكر الله تطمئن القلوب",
+            tired: "واستعينوا بالصبر والصلاة",
+            happy: "لئن شكرتم لأزيدنكم"
+        };
+        function feel(type) {
+            const display = document.getElementById('ayah-display');
+            display.style.opacity = 0;
             setTimeout(() => {
-                document.getElementById('splash').style.display = 'none';
-                document.getElementById('main-app').style.display = 'flex';
-                updateTimeStyle();
-            }, 800);
-        }, 2000);
-
-        // 4. ميزة الهزاز (ستحتاج تفعيلها في صفحة الأذكار)
-        function triggerVibration() {
-            if ("vibrate" in navigator) {
-                navigator.vibrate(50); // يهتز لمدة 50 مللي ثانية
-            }
+                display.innerText = responses[type];
+                display.style.opacity = 1;
+                // تأثير "تحدي النور": وميض عند التفاعل
+                ctx.fillStyle = 'rgba(212, 175, 55, 0.2)';
+                ctx.fillRect(0,0,canvas.width, canvas.height);
+                setTimeout(() => ctx.clearRect(0,0,canvas.width, canvas.height), 100);
+            }, 300);
         }
+
+        // محاكاة عدد المتواجدين
+        setInterval(() => {
+            const count = document.getElementById('online-count');
+            count.innerText = Math.floor(Math.random() * (150 - 120) + 120);
+        }, 5000);
     </script>
 </body>
 </html>
