@@ -1,4 +1,4 @@
-const cacheName = 'Azqary-app-v1';
+const cacheName = 'houda-app-v2'; // غيرنا الرقم من v1 لـ v2
 const assets = [
   './',
   './index.html',
