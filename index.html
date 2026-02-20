@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رمضان كريم</title>
+    <title>رمضان كريم 2026</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -17,7 +17,7 @@
             height: 100%;
             background-color: var(--black);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         /* --- شاشة الترحيب --- */
@@ -71,19 +71,19 @@
             display: none;
             padding: 20px;
             text-align: center;
-            animation: fadeIn 1s;
+            animation: fadeIn 1.2s;
         }
 
         .header-circles {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-top: 40px;
+            gap: 25px;
+            margin-top: 50px;
         }
 
         .circle {
-            width: 110px;
-            height: 110px;
+            width: 120px;
+            height: 120px;
             border: 2px solid var(--gold);
             border-radius: 50%;
             display: flex;
@@ -92,49 +92,35 @@
             color: var(--gold);
             text-decoration: none;
             font-weight: bold;
-            transition: 0.3s;
-            font-size: 0.9rem;
+            transition: 0.4s;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
         }
 
         .circle:hover {
             background-color: var(--gold);
             color: var(--black);
+            box-shadow: 0 0 20px var(--gold);
         }
 
-        /* --- العداد التنازلي --- */
-        #countdown-container {
-            margin-top: 60px;
+        /* --- عرض حالة الشهر --- */
+        .status-container {
+            margin-top: 80px;
             color: var(--gold);
         }
 
-        .countdown-title {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
+        .ramadan-title {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
         }
 
-        .timer {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            direction: ltr; /* لجعل الأرقام تظهر بشكل صحيح */
-        }
-
-        .time-box {
+        .day-counter {
+            font-size: 1.4rem;
             border: 1px solid var(--gold);
-            padding: 10px;
-            min-width: 70px;
-            border-radius: 8px;
-        }
-
-        .time-number {
-            display: block;
-            font-size: 2rem;
-            font-weight: bold;
-        }
-
-        .time-label {
-            font-size: 0.8rem;
-            text-transform: uppercase;
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 50px;
+            margin-top: 20px;
         }
 
         /* --- الأنميشن --- */
@@ -163,62 +149,36 @@
             <a href="azkar.html" class="circle">الأذكار</a>
         </div>
 
-        <div id="countdown-container">
-            <div class="countdown-title">المتبقي على شهر رمضان</div>
-            <div class="timer">
-                <div class="time-box">
-                    <span class="time-number" id="days">00</span>
-                    <span class="time-label">يوم</span>
-                </div>
-                <div class="time-box">
-                    <span class="time-number" id="hours">00</span>
-                    <span class="time-label">ساعة</span>
-                </div>
-                <div class="time-box">
-                    <span class="time-number" id="minutes">00</span>
-                    <span class="time-label">دقيقة</span>
-                </div>
-                <div class="time-box">
-                    <span class="time-number" id="seconds">00</span>
-                    <span class="time-label">ثانية</span>
-                </div>
+        <div class="status-container">
+            <div class="ramadan-title">رمضان كريم</div>
+            <div class="day-counter" id="today-info">
+                جمعة مباركة | 3 رمضان 1447 هـ
             </div>
+            <p style="color: #888; margin-top: 40px; font-style: italic;">
+                "اللهم أعنا على صيامه وقيامه"
+            </p>
         </div>
     </div>
 
     <script>
-        // 1. إخفاء شاشة الترحيب
+        // إخفاء الترحيب وإظهار المحتوى
         setTimeout(function() {
-            document.getElementById('splash-screen').style.opacity = '0';
+            const splash = document.getElementById('splash-screen');
+            const main = document.getElementById('main-content');
+            
+            splash.style.opacity = '0';
             setTimeout(() => {
-                document.getElementById('splash-screen').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
+                splash.style.display = 'none';
+                main.style.display = 'block';
             }, 800);
         }, 2000);
 
-        // 2. حساب العداد التنازلي (تاريخ رمضان المتوقع 1 مارس 2025 كمثال)
-        // يمكنك تغيير التاريخ من هنا
-        const ramadanDate = new Date("March 1, 2025 00:00:00").getTime();
-
-        const updateTimer = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = ramadanDate - now;
-
-            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById("days").innerHTML = d;
-            document.getElementById("hours").innerHTML = h;
-            document.getElementById("minutes").innerHTML = m;
-            document.getElementById("seconds").innerHTML = s;
-
-            if (distance < 0) {
-                clearInterval(updateTimer);
-                document.getElementById("countdown-container").innerHTML = "رمضان كريم!";
-            }
-        }, 1000);
+        // تحديث التاريخ بناءً على تاريخ اليوم 20 فبراير 2026
+        // بما أن 18 فبراير كان أول رمضان، فاليوم هو 3 رمضان تقريباً
+        const today = new Date();
+        if(today.getDate() == 20 && (today.getMonth()+1) == 2) {
+             document.getElementById("today-info").innerHTML = "اليوم: الجمعة | 3 رمضان 1447 هـ";
+        }
     </script>
 </body>
 </html>
