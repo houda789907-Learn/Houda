@@ -1,28 +1,10 @@
-const cacheName = 'houda-app-v2'; // غيرنا الرقم من v1 لـ v2
-const assets = [
-  './',
-  './index.html',
-  './morning_azkar.html',
-  './evening_azkar.html',
-  './icon.png',
-  './manifest.json'
-];
-
-// تثبيت الخدمة وتخزين الملفات
-self.addEventListener('install', evt => {
-  evt.waitUntil(
-    caches.open(cacheName).then(cache => {
-      console.log('بيخزن الملفات عشان يشتغل من غير نت...');
-      cache.addAll(assets);
-    })
-  );
+const cacheName = 'houda-app-v3'; // غيرنا الرقم لـ v3 عشان يجبره يتحدث
+self.addEventListener('install', (e) => {
+  self.skipWaiting(); // ده بيخلي التحديث ينزل فوراً
 });
 
-// تشغيل التطبيق من المخزن في حالة عدم وجود نت
-self.addEventListener('fetch', evt => {
-  evt.respondWith(
-    caches.match(evt.request).then(rec => {
-      return rec || fetch(evt.request);
-    })
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    fetch(event.request).catch(() => caches.match(event.request))
   );
 });
