@@ -3,61 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المصحف الشريف | عرض الصفحات</title>
+    <title>المصحف الشريف | Houda App</title>
     <style>
         :root { --gold: #d4af37; --night: #020c1b; }
-        
         body { 
             background: #fdf6e3; color: #222; font-family: 'Amiri', serif; 
             margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden;
         }
-        
         header { 
-            background: var(--night); color: var(--gold); 
-            padding: 15px 10px; 
+            background: var(--night); color: var(--gold); padding: 15px 10px; 
             display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 2px solid var(--gold);
-            z-index: 101;
+            border-bottom: 2px solid var(--gold); z-index: 101;
         }
-
         .nav-arrow {
             background: none; border: 1px solid var(--gold); color: var(--gold);
             font-size: 1.5rem; width: 40px; height: 40px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: 0.3s; padding: 0;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
         }
-
-        .nav-arrow:active { background: var(--gold); color: var(--night); }
-        .nav-arrow:disabled { opacity: 0.2; cursor: not-allowed; }
-
+        .nav-arrow:disabled { opacity: 0.2; }
         #page-title-info { text-align: center; }
-        #page-title-info div:first-child { font-size: 1.1rem; font-weight: bold; }
-        #page-title-info div:last-child { font-size: 0.8rem; opacity: 0.8; }
-
         #page-container {
-            flex: 1; padding: 20px; overflow-y: auto;
-            display: block; line-height: 2.5; text-align: justify;
-            direction: rtl; font-size: 1.6rem;
-            -webkit-overflow-scrolling: touch;
+            flex: 1; padding: 25px; overflow-y: auto;
+            line-height: 2.8; text-align: justify; font-size: 1.7rem;
         }
-
         .ayah-num { 
             display: inline-flex; align-items: center; justify-content: center;
-            width: 28px; height: 28px; border: 1px solid var(--gold); 
-            border-radius: 50%; font-size: 0.9rem; margin: 0 8px; color: #d4af37;
+            width: 30px; height: 30px; border: 1px solid var(--gold); 
+            border-radius: 50%; font-size: 0.9rem; margin: 0 10px; color: var(--gold);
             font-family: sans-serif; font-weight: bold;
         }
-
-        .basmala { 
-            display: block; text-align: center; font-size: 1.8rem; 
-            color: #8a6d3b; margin: 15px 0; font-weight: bold; 
-        }
-
+        .basmala { display: block; text-align: center; font-size: 2rem; color: #8a6d3b; margin: 20px 0; }
         .surah-header {
-            text-align: center; background: rgba(212, 175, 55, 0.05);
-            border: 1px solid var(--gold); padding: 10px; margin: 25px 0;
+            text-align: center; background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--gold); padding: 12px; margin: 30px 0;
             font-size: 1.8rem; color: var(--night); border-radius: 12px;
-            font-weight: bold;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
@@ -89,7 +68,7 @@
 
         function loadQuranPage(pageNum) {
             const container = document.getElementById('page-container');
-            container.innerHTML = "<center style='margin-top:50px; color:var(--gold);'>جاري تحميل الصفحة...</center>";
+            container.innerHTML = "<center style='margin-top:50px;'>جاري تحميل كلام الله...</center>";
 
             fetch(`https://api.alquran.cloud/v1/page/${pageNum}/quran-simple`)
                 .then(res => res.json())
@@ -109,19 +88,16 @@
 
                         let text = ayah.text;
                         
-                        // تنظيف الآية الأولى من البسملة المدمجة (بكل أنواع التشكيل الممكنة)
+                        // الحل القاتل: حذف أول 4 كلمات لو هي الآية 1 في أي سورة غير الفاتحة
                         if (ayah.numberInSurah === 1 && ayah.surah.number !== 1) {
-                            const basmalaPatterns = [
-                                /^بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ\s?/,
-                                /^بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ\s?/,
-                                /^بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ\s?/
-                            ];
-                            basmalaPatterns.forEach(pattern => {
-                                text = text.replace(pattern, "");
-                            });
+                            let words = text.split(" ");
+                            // لو أول كلمة هي "بِسْمِ" (بأي تشكيل)، احذف أول 4 كلمات
+                            if (words[0].includes("بِسْمِ") || words[0].includes("باسم")) {
+                                text = words.slice(4).join(" ");
+                            }
                         }
 
-                        container.innerHTML += `<span class="ayah">${text.trim()} <span class="ayah-num">${ayah.numberInSurah}</span></span> `;
+                        container.innerHTML += `<span class="ayah">${text} <span class="ayah-num">${ayah.numberInSurah}</span></span> `;
                     });
 
                     document.getElementById('page-num-text').innerText = `صفحة ${pageNum}`;
@@ -134,9 +110,7 @@
 
         function changePage(step) {
             currentPageNum += step;
-            if(currentPageNum >= 1 && currentPageNum <= 604) {
-                loadQuranPage(currentPageNum);
-            }
+            if(currentPageNum >= 1 && currentPageNum <= 604) loadQuranPage(currentPageNum);
         }
     </script>
 </body>
