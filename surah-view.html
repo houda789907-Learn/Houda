@@ -12,14 +12,12 @@
             margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden;
         }
         
-        /* الهيدر الجديد بالأسهم */
         header { 
             background: var(--night); color: var(--gold); 
             padding: 15px 10px; 
             display: flex; justify-content: space-between; align-items: center;
             border-bottom: 2px solid var(--gold);
             z-index: 101;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
         .nav-arrow {
@@ -30,42 +28,37 @@
         }
 
         .nav-arrow:active { background: var(--gold); color: var(--night); }
-        .nav-arrow:disabled { opacity: 0.2; cursor: not-allowed; border-color: #444; }
+        .nav-arrow:disabled { opacity: 0.2; cursor: not-allowed; }
 
-        #page-title-info {
-            text-align: center;
-        }
-
+        #page-title-info { text-align: center; }
         #page-title-info div:first-child { font-size: 1.1rem; font-weight: bold; }
         #page-title-info div:last-child { font-size: 0.8rem; opacity: 0.8; }
 
         #page-container {
             flex: 1; padding: 20px; overflow-y: auto;
-            display: block; line-height: 2.2; text-align: justify;
-            direction: rtl; font-size: 1.5rem;
+            display: block; line-height: 2.5; text-align: justify;
+            direction: rtl; font-size: 1.6rem;
             -webkit-overflow-scrolling: touch;
         }
 
         .ayah-num { 
             display: inline-flex; align-items: center; justify-content: center;
-            width: 26px; height: 26px; border: 1px solid var(--gold); 
-            border-radius: 50%; font-size: 0.8rem; margin: 0 5px; color: #888;
+            width: 28px; height: 28px; border: 1px solid var(--gold); 
+            border-radius: 50%; font-size: 0.9rem; margin: 0 8px; color: #d4af37;
             font-family: sans-serif; font-weight: bold;
         }
 
         .basmala { 
             display: block; text-align: center; font-size: 1.8rem; 
-            color: #8a6d3b; margin: 20px 0; font-weight: bold; 
+            color: #8a6d3b; margin: 15px 0; font-weight: bold; 
         }
 
         .surah-header {
-            text-align: center; background: rgba(212, 175, 55, 0.1);
+            text-align: center; background: rgba(212, 175, 55, 0.05);
             border: 1px solid var(--gold); padding: 10px; margin: 25px 0;
             font-size: 1.8rem; color: var(--night); border-radius: 12px;
             font-weight: bold;
         }
-
-        .footer-spacer { height: 20px; background: #fdf6e3; }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
 </head>
@@ -73,19 +66,14 @@
 
     <header>
         <button class="nav-arrow" id="prevBtn" onclick="changePage(-1)">➔</button>
-        
         <div id="page-title-info">
             <div id="page-num-text">جاري التحميل...</div>
             <div id="juz-info">الجزء --</div>
         </div>
-
         <button class="nav-arrow" id="nextBtn" onclick="changePage(1)">⬅</button>
     </header>
 
-    <div id="page-container">
-        </div>
-
-    <div class="footer-spacer"></div>
+    <div id="page-container"></div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
@@ -111,6 +99,7 @@
                     let lastSurah = "";
 
                     ayahs.forEach(ayah => {
+                        // وضع عنوان السورة والبسملة مرة واحدة فقط عند بداية كل سورة
                         if (ayah.surah.name !== lastSurah) {
                             container.innerHTML += `<div class="surah-header">سورة ${ayah.surah.name}</div>`;
                             if (ayah.surah.number !== 1 && ayah.surah.number !== 9) {
@@ -120,8 +109,10 @@
                         }
 
                         let text = ayah.text;
-                        if (ayah.numberInSurah === 1 && ayah.surah.number !== 1) {
-                            text = text.replace("بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ", "");
+                        
+                        // السر هنا: حذف البسملة إذا كانت مدمجة في نص الآية (ما عدا الفاتحة)
+                        if (ayah.surah.number !== 1) {
+                            text = text.replace("بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ", "").trim();
                         }
 
                         container.innerHTML += `<span class="ayah">${text} <span class="ayah-num">${ayah.numberInSurah}</span></span> `;
@@ -129,7 +120,6 @@
 
                     document.getElementById('page-num-text').innerText = `صفحة ${pageNum}`;
                     document.getElementById('juz-info').innerText = `الجزء ${ayahs[0].juz}`;
-                    
                     document.getElementById('prevBtn').disabled = (pageNum <= 1);
                     document.getElementById('nextBtn').disabled = (pageNum >= 604);
                     container.scrollTop = 0;
