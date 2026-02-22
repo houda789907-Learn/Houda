@@ -99,7 +99,6 @@
                     let lastSurah = "";
 
                     ayahs.forEach(ayah => {
-                        // وضع عنوان السورة والبسملة مرة واحدة فقط عند بداية كل سورة
                         if (ayah.surah.name !== lastSurah) {
                             container.innerHTML += `<div class="surah-header">سورة ${ayah.surah.name}</div>`;
                             if (ayah.surah.number !== 1 && ayah.surah.number !== 9) {
@@ -110,12 +109,19 @@
 
                         let text = ayah.text;
                         
-                        // السر هنا: حذف البسملة إذا كانت مدمجة في نص الآية (ما عدا الفاتحة)
-                        if (ayah.surah.number !== 1) {
-                            text = text.replace("بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ", "").trim();
+                        // تنظيف الآية الأولى من البسملة المدمجة (بكل أنواع التشكيل الممكنة)
+                        if (ayah.numberInSurah === 1 && ayah.surah.number !== 1) {
+                            const basmalaPatterns = [
+                                /^بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ\s?/,
+                                /^بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ\s?/,
+                                /^بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ\s?/
+                            ];
+                            basmalaPatterns.forEach(pattern => {
+                                text = text.replace(pattern, "");
+                            });
                         }
 
-                        container.innerHTML += `<span class="ayah">${text} <span class="ayah-num">${ayah.numberInSurah}</span></span> `;
+                        container.innerHTML += `<span class="ayah">${text.trim()} <span class="ayah-num">${ayah.numberInSurah}</span></span> `;
                     });
 
                     document.getElementById('page-num-text').innerText = `صفحة ${pageNum}`;
