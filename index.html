@@ -33,33 +33,45 @@
             border: 2px solid var(--gold);
         }
 
-        /* المنيو الجانبية */
+        /* المنيو الجانبية المحدثة (تتحرك للأعلى والأسفل وبها مسافة 2 سم) */
         .side-menu {
-            position: fixed; top: 0; right: -280px;
-            width: 260px; height: 100%;
+            position: fixed; 
+            top: 20px; /* مسافة من الأعلى */
+            right: -280px;
+            width: 260px; 
+            height: calc(100% - 40px); /* مسافة من الأسفل */
             background: var(--night-blue);
-            border-left: 3px solid var(--gold);
-            z-index: 10000; transition: 0.4s;
-            padding-top: 80px; display: flex; flex-direction: column;
-
-/* السطرين دول هم السر عشان تطلع وتنزل براحتك */
-            overflow-y: auto; 
+            border: 2px solid var(--gold); /* برواز كامل للمنيو العائمة */
+            border-right: none;
+            z-index: 10000; 
+            transition: 0.4s;
+            padding-top: 60px; 
+            padding-bottom: 60px; /* مساحة إضافية للسحب المريح */
+            display: flex; 
+            flex-direction: column;
+            overflow-y: auto; /* السر في الطلوع والنزول */
             overflow-x: hidden;
-            
+            border-radius: 25px 0 0 25px; /* حواف دائرية فخمة */
+            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
         }
+
         .side-menu.open { right: 0; }
+        
         .side-menu a {
             color: var(--white); text-decoration: none;
             padding: 15px 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.1);
             font-size: 1.1rem; text-align: right;
+            transition: 0.2s;
         }
+
+        .side-menu a:active { background: rgba(212, 175, 55, 0.1); }
 
         .overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.7); display: none; z-index: 9998;
         }
 
-        /* الأدعية العائمة (اللي بتسبح) */
+        /* الأدعية العائمة */
         .floating-dua {
             position: fixed; bottom: -100px; color: rgba(212, 175, 55, 0.6);
             font-size: 1.2rem; font-weight: bold; width: 100%; text-align: center;
@@ -110,17 +122,17 @@
     <div class="side-menu" id="sideMenu">
         <a href="index.html">🏠 الرئيسية</a>
         <a href="#" onclick="enableNotifications()" style="color: #4ade80; font-weight: bold;">🔔 تفعيل الإشعارات</a>
-         <a href="morning.html">☀️ أذكار الصباح</a>
+        <a href="morning.html">☀️ أذكار الصباح</a>
         <a href="evening.html">🌙 أذكار المساء</a>
         <a href="tasks.html">✅ ورد المحاسبة اليومي</a>
         <a href="tasbih.html">📿 السبحة الإلكترونية</a>
         <a href="quran-duas.html">📖 أدعية قرآنية</a>
         <a href="prophet-duas.html">💬 أدعية نبوية</a>
         <a href="istighfar.html">📿 قسم الاستغفار</a>
-       
         <a href="ramadan.html">🌙 أدعية رمضان</a>
         <a href="istikhara.html">🤲 دعاء الاستخارة</a>
         <a href="worry.html">😔 أدعية الهم والحزن</a>
+        <div style="height: 40px;"></div>
     </div>
       
 
@@ -128,7 +140,7 @@
 
     <div id="app">
         <h1 class="main-title">رمضان كريم</h1>
-        <div id="ramadan-date">2 رمضان 1447 هـ</div>
+        <div id="ramadan-date">رمضان 1447 هـ</div>
 
         <div class="ayah-card">
             <small style="color: var(--gold);">✨ آية لقلبك</small>
@@ -149,7 +161,6 @@
             overlay.style.display = menu.classList.contains('open') ? 'block' : 'none';
         }
 
-        // دالة الأدعية الطائرة (اللي كنت بتسأل عليها)
         const floatingDuas = ["سبحان الله", "الحمد لله", "لا إله إلا الله", "الله أكبر", "أستغفر الله", "اللهم صلِّ على محمد"];
         function spawnDua() {
             const d = document.createElement('div');
@@ -159,15 +170,14 @@
             document.body.appendChild(d);
             setTimeout(() => d.remove(), 12000);
         }
-        setInterval(spawnDua, 4000); // كل 4 ثواني بيطلع ذكر جديد يسبح
+        setInterval(spawnDua, 4000);
 
         function setDailyAyah() {
-            const ayat = ["﴿وَبَشِّرِ الصَّابِرِينَ﴾", "﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾", "﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾", "﴿فَاصْبِرْ صَبْرًا جَمِيلًا﴾"];
+            const ayat = ["﴿وَبَشِّرِ الصَّابِرِينَ﴾", "﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾", "﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾", "﴿فَاصْبِرْ صَبْرًا جَمِيلًا﴾"];
             const day = new Date().getDate();
             document.getElementById('ayah-text').innerText = ayat[day % ayat.length];
         }
 
-        // نجوم الخلفية
         const container = document.getElementById('stars-container');
         for (let i = 0; i < 60; i++) {
             const star = document.createElement('div');
