@@ -16,14 +16,13 @@
     <style>
         :root { 
             --gold: #d4af37; 
-            --deep-sky: #0a192f; /* اللون السماوي الغامق اللي أنت بتحبه */
+            --deep-sky: #0a192f; 
             --night-blue: #020c1b;
             --white: #ffffff;
         }
         
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            /* رجعنا تدرج الألوان الأصلي */
             background: radial-gradient(circle at center, var(--deep-sky) 0%, var(--night-blue) 100%); 
             color: var(--white); font-family: 'Segoe UI', sans-serif; overflow: hidden;
         }
@@ -44,7 +43,10 @@
             background: var(--night-blue);
             border: 2px solid var(--gold);
             z-index: 10000; transition: 0.4s;
-            padding-top: 60px; overflow-y: auto;
+            /* تم تعديل المسافات: رفع المحتوى لفوق وزيادة مساحة السحب تحت */
+            padding-top: 30px; 
+            padding-bottom: 80px; 
+            overflow-y: auto;
             border-radius: 25px 0 0 25px; 
             box-shadow: -10px 0 30px rgba(0,0,0,0.5);
         }
@@ -62,7 +64,6 @@
             background: rgba(0,0,0,0.7); display: none; z-index: 9998;
         }
 
-        /* النجوم والرسائل العائمة */
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; }
         @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
@@ -80,6 +81,7 @@
 
         .ceo-section { position: absolute; bottom: 15px; width: 100%; text-align: center; }
         .ceo-name { font-size: 1.4rem; color: var(--gold); font-weight: bold; }
+        .co-ceo-name { font-size: 1.1rem; color: var(--white); font-weight: bold; margin-top: 2px; opacity: 0.9; }
     </style>
 </head>
 <body>
@@ -118,8 +120,7 @@
     <footer class="ceo-section">
         <div style="font-size: 0.6rem; color: var(--gold); opacity: 0.7; letter-spacing: 1px;">CEO & FOUNDER</div>
         <div class="ceo-name">HOUDA</div>
-        
-        
+        <div class="co-ceo-name">ZOZ BASHA</div>
     </footer>
 
     <script>
@@ -130,7 +131,6 @@
             overlay.style.display = menu.classList.contains('open') ? 'block' : 'none';
         }
 
-        // الأذكار العائمة
         const floatingDuas = ["سبحان الله", "الحمد لله", "لا إله إلا الله", "الله أكبر", "أستغفر الله", "اللهم صلِّ على محمد"];
         function spawnDua() {
             const d = document.createElement('div');
@@ -148,7 +148,6 @@
             document.getElementById('ayah-text').innerText = ayat[day % ayat.length];
         }
 
-        // توليد النجوم
         const starContainer = document.getElementById('stars-container');
         for (let i = 0; i < 60; i++) {
             const star = document.createElement('div');
@@ -164,7 +163,6 @@
         window.onload = () => {
             setDailyAyah();
             if ('serviceWorker' in navigator) { 
-                // تسجيل السيرفس وركر مع تحديث الكاش
                 navigator.serviceWorker.register('sw.js').then(reg => {
                     reg.update(); 
                 });
