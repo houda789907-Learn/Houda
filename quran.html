@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>القرآن الكريم | Houda App</title>
+    <style>
+        :root { --gold: #d4af37; --night: #020c1b; --white: #ffffff; }
+        body { 
+            background: radial-gradient(circle at center, #0a192f 0%, var(--night) 100%); 
+            color: var(--white); font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px;
+        }
+        header { padding: 20px; border-bottom: 2px solid var(--gold); margin-bottom: 20px; }
+        .surah-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; max-width: 800px; margin: 0 auto; }
+        .surah-card {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(212,175,55,0.2);
+            padding: 15px; border-radius: 12px; cursor: pointer; transition: 0.3s;
+        }
+        .surah-card:hover { border-color: var(--gold); background: rgba(212,175,55,0.1); }
+        .surah-num { color: var(--gold); font-size: 0.8rem; display: block; }
+        .surah-name { font-size: 1.2rem; font-weight: bold; }
+        .back-btn { display: inline-block; margin-top: 20px; color: var(--gold); text-decoration: none; padding: 10px 20px; border: 1px solid var(--gold); border-radius: 20px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 style="color: var(--gold); margin:0;">📖 المصحف الشريف</h1>
+    </header>
+
+    <div class="surah-list" id="surahContainer">
+        </div>
+
+    <center><a href="index.html" class="back-btn">🏠 الرئيسية</a></center>
+
+    <script>
+        // جلب قائمة السور من API القرآن
+        fetch('https://api.alquran.cloud/v1/surah')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('surahContainer');
+                data.data.forEach(surah => {
+                    const card = document.createElement('div');
+                    card.className = 'surah-card';
+                    card.onclick = () => window.location.href = `surah-view.html?no=${surah.number}`;
+                    card.innerHTML = `
+                        <span class="surah-num">${surah.number}</span>
+                        <div class="surah-name">${surah.name}</div>
+                        <small style="opacity:0.6">${surah.numberOfAyahs} آية</small>
+                    `;
+                    container.appendChild(card);
+                });
+            });
+    </script>
+</body>
+</html>
