@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قراءة السورة</title>
+    <style>
+        :root { --gold: #d4af37; --night: #020c1b; }
+        body { background: #fdf6e3; color: #333; font-family: 'Amiri', serif; padding: 30px; line-height: 2.5; text-align: center; }
+        .surah-title { color: var(--night); border-bottom: 2px solid var(--gold); display: inline-block; margin-bottom: 30px; font-size: 2rem; }
+        .ayah { font-size: 1.6rem; word-wrap: break-word; }
+        .ayah-num { color: var(--gold); font-family: sans-serif; font-size: 1rem; margin: 0 5px; }
+        .loading { color: var(--gold); font-size: 1.5rem; }
+        .nav-btns { margin-top: 50px; }
+        .nav-btns a { text-decoration: none; background: var(--night); color: white; padding: 10px 20px; border-radius: 10px; }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="content">
+        <div class="loading">جاري تحميل السورة...</div>
+    </div>
+
+    <div class="nav-btns">
+        <a href="quran.html">رجوع للفهرس</a>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const surahNo = urlParams.get('no');
+
+        fetch(`https://api.alquran.cloud/v1/surah/${surahNo}`)
+            .then(response => response.json())
+            .then(data => {
+                const surah = data.data;
+                let html = `<div class="surah-title">${surah.name}</div><br>`;
+                
+                // إضافة البسملة إذا لم تكن الفاتحة أو التوبة
+                if (surahNo != 1 && surahNo != 9) {
+                    html += `<div style="font-size: 1.5rem; color: var(--gold);">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div><br>`;
+                }
+
+                surah.ayahs.forEach(ayah => {
+                    // إزالة البسملة المكررة من أول آية في الـ API
+                    let text = ayah.text;
+                    if (surahNo != 1 && ayah.numberInSurah == 1) {
+                        text = text.replace("بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ", "");
+                    }
+                    html += `<span class="ayah">${text} <span class="ayah-num">(${ayah.numberInSurah})</span></span> `;
+                });
+
+                document.getElementById('content').innerHTML = html;
+                document.title = surah.name;
+            });
+    </script>
+</body>
+</html>
