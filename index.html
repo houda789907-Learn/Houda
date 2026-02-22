@@ -43,7 +43,6 @@
             background: var(--night-blue);
             border: 2px solid var(--gold);
             z-index: 10000; transition: 0.4s;
-            /* تم تعديل المسافات: رفع المحتوى لفوق وزيادة مساحة السحب تحت */
             padding-top: 30px; 
             padding-bottom: 80px; 
             overflow-y: auto;
@@ -148,6 +147,59 @@
             document.getElementById('ayah-text').innerText = ayat[day % ayat.length];
         }
 
+        // إعدادات الإشعارات
+        const hourlyAzkar = ["سبحان الله وبحمده", "أستغفر الله وأتوب إليه", "صلِّ على محمد ﷺ", "لا حول ولا قوة إلا بالله", "الحمد لله دائماً وأبداً"];
+
+        function enableNotifications() {
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    alert("تم تفعيل الإشعارات بنجاح! ✅ ستصلك أذكار كل ساعة ومواعيد ثابتة.");
+                    startHourlyNotifications();
+                    scheduleDailyNotifications();
+                }
+            });
+        }
+
+        function sendNotification(title, body, url = 'index.html') {
+            if ('serviceWorker' in navigator && Notification.permission === 'granted') {
+                navigator.serviceWorker.ready.then(reg => {
+                    reg.showNotification(title, {
+                        body: body,
+                        icon: 'icon.png',
+                        badge: 'icon.png',
+                        vibrate: [200, 100, 200],
+                        data: { url: url }
+                    });
+                });
+            }
+        }
+
+        function startHourlyNotifications() {
+            sendNotification("ذكرى", hourlyAzkar[Math.floor(Math.random() * hourlyAzkar.length)]);
+            setInterval(() => {
+                const zikr = hourlyAzkar[Math.floor(Math.random() * hourlyAzkar.length)];
+                sendNotification("ذكرى", zikr);
+            }, 3600000); 
+        }
+
+        function scheduleDailyNotifications() {
+            const now = new Date();
+            const times = [
+                { h: 7, m: 0, title: "☀️ أذكار الصباح", body: "وقت أذكار الصباح", url: "morning.html" },
+                { h: 17, m: 0, title: "🌙 أذكار المساء", body: "وقت أذكار المساء", url: "evening.html" }
+            ];
+            times.forEach(t => {
+                let s = new Date();
+                s.setHours(t.h, t.m, 0, 0);
+                if (s <= now) s.setDate(s.getDate() + 1);
+                setTimeout(() => {
+                    sendNotification(t.title, t.body, t.url);
+                    setInterval(() => sendNotification(t.title, t.body, t.url), 24*60*60*1000);
+                }, s.getTime() - now.getTime());
+            });
+        }
+
+        // توليد النجوم
         const starContainer = document.getElementById('stars-container');
         for (let i = 0; i < 60; i++) {
             const star = document.createElement('div');
@@ -163,17 +215,15 @@
         window.onload = () => {
             setDailyAyah();
             if ('serviceWorker' in navigator) { 
-                navigator.serviceWorker.register('sw.js').then(reg => {
+                navigator.serviceWorker.register('sw.js?v=12').then(reg => {
                     reg.update(); 
+                    if (Notification.permission === 'granted') {
+                        startHourlyNotifications();
+                        scheduleDailyNotifications();
+                    }
                 });
             }
         };
-
-        function enableNotifications() {
-            Notification.requestPermission().then(permission => {
-                if (permission === "granted") { alert("تم تفعيل الإشعارات بنجاح! ✅"); }
-            });
-        }
     </script>
 </body>
 </html>
