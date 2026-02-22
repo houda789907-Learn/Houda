@@ -1,24 +1,25 @@
-self.addEventListener('push', function(event) {
-    const options = {
-        body: event.data ? event.data.text() : 'حان وقت ذكر الله 🌙',
-        icon: 'icon.png',
-        badge: 'icon.png',
-        vibrate: [100, 50, 100],
-        data: {
-            dateOfArrival: Date.now(),
-            primaryKey: '1'
-        }
-    };
+const CACHE_NAME = 'adhkar-v1';
+const assets = ['./', './index.html', './manifest.json', './icon.png'];
 
-    event.waitUntil(
-        self.registration.showNotification('تطبيق حوده للأذكار', options)
-    );
+// تثبيت التطبيق وتخزين الملفات
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(assets))
+  );
 });
 
-// لما المستخدم يدوس على الإشعار يفتح له التطبيق
-self.addEventListener('notificationclick', function(event) {
-    event.notification.close();
-    event.waitUntil(
-        clients.openWindow('index.html')
-    );
+// تفعيل السيرفس وركر
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys => Promise.all(
+      keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+    ))
+  );
+});
+
+// تشغيل التطبيق حتى بدون إنترنت
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request).then(res => res || fetch(event.request))
+  );
 });
