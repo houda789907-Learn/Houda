@@ -1,218 +1,181 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق اذكاري | اموسوعة لأذكار</title>
-    
-    <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق اذكاري | موسوعة الأذكار</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    
+    <meta name="theme-color" content="#0a192f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <style>
-        :root { 
-            --gold: #d4af37; 
-            --deep-sky: #0a192f; 
-            --night-blue: #020c1b;
-            --white: #ffffff;
-        }
-        
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            background: radial-gradient(circle at center, var(--deep-sky) 0%, var(--night-blue) 100%); 
-            color: var(--white); font-family: 'Segoe UI', sans-serif; overflow: hidden;
-        }
+    <style>
+        :root { 
+            --gold: #d4af37; 
+            --deep-sky: #0a192f; /* اللون السماوي الغامق اللي أنت بتحبه */
+            --night-blue: #020c1b;
+            --white: #ffffff;
+        }
+        
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            /* رجعنا تدرج الألوان الأصلي */
+            background: radial-gradient(circle at center, var(--deep-sky) 0%, var(--night-blue) 100%); 
+            color: var(--white); font-family: 'Segoe UI', sans-serif; overflow: hidden;
+        }
 
-        /* زرار المنيو */
-        .menu-btn {
-            position: fixed; top: 20px; right: 20px;
-            font-size: 1.8rem; color: var(--gold);
-            cursor: pointer; z-index: 9999;
-            background: rgba(10, 25, 47, 0.9);
-            padding: 8px 12px; border-radius: 12px;
-            border: 2px solid var(--gold);
-        }
+        /* زرار المنيو */
+        .menu-btn {
+            position: fixed; top: 20px; right: 20px;
+            font-size: 1.8rem; color: var(--gold);
+            cursor: pointer; z-index: 9999;
+            background: rgba(10, 25, 47, 0.9);
+            padding: 8px 12px; border-radius: 12px;
+            border: 2px solid var(--gold);
+        }
 
-        /* المنيو الجانبية - تدعم السحب والتحريك الداخلي */
-        .side-menu {
-            position: fixed; 
-            top: 20px; 
-            right: -280px;
-            width: 260px; 
-            height: calc(100% - 40px); 
-            background: var(--night-blue);
-            border: 2px solid var(--gold);
-            border-right: none;
-            z-index: 10000; 
-            transition: 0.4s;
-            padding-top: 60px; 
-            
-            /* تفعيل سحب العناصر داخلياً */
-            display: block; 
-            overflow-y: auto; 
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
+        .side-menu {
+            position: fixed; top: 20px; right: -280px;
+            width: 260px; height: calc(100% - 40px); 
+            background: var(--night-blue);
+            border: 2px solid var(--gold);
+            z-index: 10000; transition: 0.4s;
+            padding-top: 60px; overflow-y: auto;
+            border-radius: 25px 0 0 25px; 
+            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+        }
 
-            border-radius: 25px 0 0 25px; 
-            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
-        }
+        .side-menu.open { right: 0; }
+        
+        .side-menu a {
+            display: block; color: var(--white); text-decoration: none;
+            padding: 15px 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            font-size: 1.1rem; text-align: right;
+        }
 
-        .side-menu.open { right: 0; }
-        
-        .side-menu a {
-            display: block;
-            color: var(--white); text-decoration: none;
-            padding: 20px 25px; /* مساحة كبيرة عشان السحب بالصباع يكون سهل */
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-            font-size: 1.1rem; text-align: right;
-            transition: 0.2s;
-        }
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); display: none; z-index: 9998;
+        }
 
-        .side-menu a:active { background: rgba(212, 175, 55, 0.1); }
+        /* النجوم والرسائل العائمة */
+        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-        /* تخصيص شكل شريط السحب (Scrollbar) عشان يكون شيك */
-        .side-menu::-webkit-scrollbar { width: 3px; }
-        .side-menu::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+        .floating-dua {
+            position: fixed; bottom: -100px; color: rgba(212, 175, 55, 0.6);
+            font-size: 1.2rem; font-weight: bold; width: 100%; text-align: center;
+            animation: floatUp 12s linear infinite; pointer-events: none; z-index: 5;
+        }
+        @keyframes floatUp { from { transform: translateY(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } to { transform: translateY(-115vh); opacity: 0; } }
 
-        .overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); display: none; z-index: 9998;
-        }
+        #app { display: flex; flex-direction: column; height: 100vh; justify-content: center; align-items: center; text-align: center; position: relative; z-index: 10; }
+        .main-title { font-size: 2.5rem; color: var(--gold); margin-bottom: 5px; }
+        #ramadan-date { font-size: 1.3rem; color: var(--gold); background: rgba(212, 175, 55, 0.1); padding: 8px 25px; border-radius: 20px; border: 1px solid var(--gold); margin-bottom: 20px; }
+        .ayah-card { margin: 20px; padding: 15px; max-width: 300px; background: rgba(255, 255, 255, 0.05); border-radius: 15px; border: 1px dashed var(--gold); }
 
-        /* الأدعية العائمة */
-        .floating-dua {
-            position: fixed; bottom: -100px; color: rgba(212, 175, 55, 0.6);
-            font-size: 1.2rem; font-weight: bold; width: 100%; text-align: center;
-            animation: floatUp 12s linear infinite; pointer-events: none; z-index: 5;
-        }
-
-        @keyframes floatUp { 
-            from { transform: translateY(0); opacity: 0; } 
-            10% { opacity: 1; } 
-            90% { opacity: 1; } 
-            to { transform: translateY(-115vh); opacity: 0; } 
-        }
-
-        #app {
-            display: flex; flex-direction: column; height: 100vh;
-            justify-content: center; align-items: center; 
-            position: relative; z-index: 10; text-align: center;
-        }
-
-        .main-title { font-size: 2.5rem; color: var(--gold); margin-bottom: 5px; }
-        
-        #ramadan-date {
-            font-size: 1.3rem; color: var(--gold);
-            background: rgba(212, 175, 55, 0.1);
-            padding: 8px 25px; border-radius: 20px;
-            border: 1px solid var(--gold); margin-bottom: 20px;
-        }
-
-        .ayah-card {
-            margin: 20px; padding: 15px; max-width: 300px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px; border: 1px dashed var(--gold);
-        }
-
-       <footer style="position: absolute; bottom: 15px; width: 100%; text-align: center;">
-            <div style="margin-bottom: 5px;">
-                <div style="font-size: 0.6rem; color: var(--gold); opacity: 0.7; letter-spacing: 1px;">CEO & FOUNDER</div>
-                <div class="ceo-name" style="font-size: 1.4rem; color: var(--gold); font-weight: bold;">HOUDA</div>
-            </div>
-
-            <div style="margin-top: 5px;">
-                <div style="font-size: 0.6rem; color: var(--gold); opacity: 0.7; letter-spacing: 1px;">CREATIVE DIRECTOR</div>
-                <div style="color: var(--white); font-size: 1.2rem; font-weight: bold;">ZIAD</div>
-            </div>
-        </footer>
-    </style>
+        .ceo-section { position: absolute; bottom: 15px; width: 100%; text-align: center; }
+        .ceo-name { font-size: 1.4rem; color: var(--gold); font-weight: bold; }
+    </style>
 </head>
 <body>
 
-    <div id="stars-container"></div>
-    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    <div id="stars-container"></div>
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
-    <div class="side-menu" id="sideMenu">
-        <a href="index.html">🏠 الرئيسية</a>
-        <a href="#" onclick="enableNotifications()" style="color: #4ade80; font-weight: bold;">🔔 تفعيل الإشعارات</a>
-        <a href="quran.html">📖 المصحف الشريف</a>
-        <a href="morning.html">☀️ أذكار الصباح</a>
-        <a href="evening.html">🌙 أذكار المساء</a>
-        <a href="general-adhkar.html">📚 أذكار عامة</a>
-       <a href="tasks.html">✅ ورد المحاسبة اليومي</a>
-        <a href="tasbih.html">📿 السبحة الإلكترونية</a>
-        <a href="quran-duas.html">📖 أدعية قرآنية</a>
-        <a href="prophet-duas.html">💬 أدعية نبوية</a>
-        <a href="istighfar.html">📿 قسم الاستغفار</a>
-        <a href="ramadan.html">🌙 أدعية رمضان</a>
-        <a href="istikhara.html">🤲 دعاء الاستخارة</a>
-        <a href="worry.html">😔 أدعية الهم والحزن</a>
-        <div style="height: 60px;"></div>
-    </div>
-      
+    <div class="side-menu" id="sideMenu">
+        <a href="index.html">🏠 الرئيسية</a>
+        <a href="#" onclick="enableNotifications()" style="color: #4ade80; font-weight: bold;">🔔 تفعيل الإشعارات</a>
+        <a href="quran.html">📖 المصحف الشريف</a>
+        <a href="morning.html">☀️ أذكار الصباح</a>
+        <a href="evening.html">🌙 أذكار المساء</a>
+        <a href="general-adhkar.html">📚 أذكار عامة</a>
+        <a href="tasks.html">✅ ورد المحاسبة اليومي</a>
+        <a href="tasbih.html">📿 السبحة الإلكترونية</a>
+        <a href="quran-duas.html">📖 أدعية قرآنية</a>
+        <a href="prophet-duas.html">💬 أدعية نبوية</a>
+        <a href="istighfar.html">📿 قسم الاستغفار</a>
+        <a href="ramadan.html">🌙 أدعية رمضان</a>
+        <a href="istikhara.html">🤲 دعاء الاستخارة</a>
+        <a href="worry.html">😔 أدعية الهم والحزن</a>
+    </div>
 
-    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
-    <div id="app">
-        <h1 class="main-title">رمضان كريم</h1>
-        <div id="ramadan-date">رمضان 1447 هـ</div>
+    <div id="app">
+        <h1 class="main-title">رمضان كريم</h1>
+        <div id="ramadan-date">رمضان 1447 هـ</div>
+        <div class="ayah-card">
+            <small style="color: var(--gold);">✨ آية لقلبك</small>
+            <p id="ayah-text" style="font-size: 1.1rem; margin-top: 10px;">جاري اختيار آية...</p>
+        </div>
+    </div>
 
-        <div class="ayah-card">
-            <small style="color: var(--gold);">✨ آية لقلبك</small>
-            <p id="ayah-text" style="font-size: 1.1rem; margin-top: 10px;">جاري اختيار آية...</p>
-        </div>
+    <footer class="ceo-section">
+        <div style="font-size: 0.6rem; color: var(--gold); opacity: 0.7; letter-spacing: 1px;">CEO & FOUNDER</div>
+        <div class="ceo-name">HOUDA</div>
+        <div style="font-size: 0.6rem; color: var(--gold); opacity: 0.7; letter-spacing: 1px; margin-top:5px;">CREATIVE DIRECTOR</div>
+        <div style="color: var(--white); font-size: 1.2rem; font-weight: bold;">ZIAD</div>
+    </footer>
 
-    
-    </div>
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('overlay');
+            menu.classList.toggle('open');
+            overlay.style.display = menu.classList.contains('open') ? 'block' : 'none';
+        }
 
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById('sideMenu');
-            const overlay = document.getElementById('overlay');
-            menu.classList.toggle('open');
-            overlay.style.display = menu.classList.contains('open') ? 'block' : 'none';
-        }
+        // الأذكار العائمة
+        const floatingDuas = ["سبحان الله", "الحمد لله", "لا إله إلا الله", "الله أكبر", "أستغفر الله", "اللهم صلِّ على محمد"];
+        function spawnDua() {
+            const d = document.createElement('div');
+            d.className = 'floating-dua';
+            d.innerText = floatingDuas[Math.floor(Math.random() * floatingDuas.length)];
+            d.style.left = Math.random() * 80 + 10 + '%';
+            document.body.appendChild(d);
+            setTimeout(() => d.remove(), 12000);
+        }
+        setInterval(spawnDua, 4000);
 
-        const floatingDuas = ["سبحان الله", "الحمد لله", "لا إله إلا الله", "الله أكبر", "أستغفر الله", "اللهم صلِّ على محمد"];
-        function spawnDua() {
-            const d = document.createElement('div');
-            d.className = 'floating-dua';
-            d.innerText = floatingDuas[Math.floor(Math.random() * floatingDuas.length)];
-            d.style.left = Math.random() * 80 + 10 + '%';
-            document.body.appendChild(d);
-            setTimeout(() => d.remove(), 12000);
-        }
-        setInterval(spawnDua, 4000);
+        function setDailyAyah() {
+            const ayat = ["﴿وَبَشِّرِ الصَّابِرِينَ﴾", "﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾", "﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾", "﴿فَاصْبِرْ صَبْرًا جَمِيلًا﴾"];
+            const day = new Date().getDate();
+            document.getElementById('ayah-text').innerText = ayat[day % ayat.length];
+        }
 
-        function setDailyAyah() {
-            const ayat = ["﴿وَبَشِّرِ الصَّابِرِينَ﴾", "﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾", "﴿إِنَّ مَعَ الْعُسْرِ يُسْرًا﴾", "﴿فَاصْبِرْ صَبْرًا جَمِيلًا﴾"];
-            const day = new Date().getDate();
-            document.getElementById('ayah-text').innerText = ayat[day % ayat.length];
-        }
+        // توليد النجوم
+        const starContainer = document.getElementById('stars-container');
+        for (let i = 0; i < 60; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = Math.random() * 3 + 'px';
+            star.style.height = star.style.width;
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+            starContainer.appendChild(star);
+        }
 
-        const container = document.getElementById('stars-container');
-        for (let i = 0; i < 60; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            star.style.width = Math.random() * 3 + 'px';
-            star.style.height = star.style.width;
-            star.style.top = Math.random() * 100 + '%';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
-            container.appendChild(star);
-        }
+        window.onload = () => {
+            setDailyAyah();
+            if ('serviceWorker' in navigator) { 
+                // تسجيل السيرفس وركر مع تحديث الكاش
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    reg.update(); 
+                });
+            }
+        };
 
-        window.onload = () => {
-            setDailyAyah();
-            if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
-        };
-
-        function enableNotifications() {
-            Notification.requestPermission().then(permission => {
-                if (permission === "granted") { alert("تم تفعيل الإشعارات بنجاح! ✅"); }
-            });
-        }
-    </script>
+        function enableNotifications() {
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") { alert("تم تفعيل الإشعارات بنجاح! ✅"); }
+            });
+        }
+    </script>
 </body>
 </html>
