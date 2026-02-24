@@ -1,4 +1,4 @@
-const CACHE_NAME = 'adhkar-v4'; // تحديث الإصدار لضمان مسح القديم
+const CACHE_NAME = 'adhkar-v5'; // تحديث الإصدار لـ v5 لضمان مسح القديم
 
 // القائمة الكاملة للملفات - تأكد من صحة الأسماء 100%
 const assets = [
@@ -20,19 +20,18 @@ const assets = [
   './worry.html'
 ];
 
-// مرحلة التثبيت: تحميل "كل" الملفات مسبقاً (Pre-caching)
+// مرحلة التثبيت: تحميل "كل" الملفات مسبقاً
 self.addEventListener('install', event => {
   self.skipWaiting(); 
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      console.log('جاري تحميل كافة الأقسام للعمل أوفلاين...');
-      // addAll هنا بتضمن إن كل الملفات تنزل وتتخزن فوراً
+      console.log('جاري تحديث ملفات التطبيق...');
       return cache.addAll(assets);
     })
   );
 });
 
-// مرحلة التفعيل: تنظيف الكاش القديم وتشغيل التحديث فوراً
+// مرحلة التفعيل: تنظيف الكاش القديم (v4 وأي إصدار قديم)
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys => Promise.all(
@@ -43,24 +42,27 @@ self.addEventListener('activate', event => {
   );
 });
 
-// تشغيل التطبيق: البحث في المخزن أولاً، ثم النت
+// تشغيل التطبيق: استراتيجية ذكية (Network First للـ HTML عشان التحديثات تظهر)
 self.addEventListener('fetch', event => {
+  // إذا كان الطلب لصفحة HTML، نحاول نجيبها من النت الأول عشان نشوف التحديث
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  // باقي الملفات (صور، أيقونات) نستخدم الكاش الأول للسرعة
   event.respondWith(
     caches.match(event.request).then(res => {
-      // إذا وجد الملف في المخزن (Cache) يفتحه فوراً بدون نت
-      if (res) return res;
-
-      // إذا لم يجده (مثل صور خارجية أو محتوى جديد) يحاول جلبه من النت وتخزينه
-      return fetch(event.request).then(networkResponse => {
+      return res || fetch(event.request).then(networkResponse => {
         return caches.open(CACHE_NAME).then(cache => {
-          // تخزين النسخة الجديدة للمرة القادمة
           cache.put(event.request, networkResponse.clone());
           return networkResponse;
         });
-      }).catch(() => {
-        // إذا كان الشخص أوفلاين والملف مش موجود أصلاً في القائمة
-        console.log('هذا الملف غير متوفر أوفلاين حالياً');
       });
+    }).catch(() => {
+      console.log('أنت أوفلاين، وهذا الملف غير محفوظ');
     })
   );
 });
