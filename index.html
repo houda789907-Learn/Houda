@@ -213,26 +213,26 @@
         }
 
       window.onload = () => {
-      setDailyAyah(); // تشغيل آية اليوم
-      
-      if ('serviceWorker' in navigator) { 
-          // غيرنا v=6 لـ v=7 عشان تتماشى مع ملف sw.js الجديد
-        navigator.serviceWorker.register('sw.js?v=7') // غيرنا من 6 لـ 7
-              console.log('تم تسجيل الـ Service Worker بنجاح ✅');
-              
-              // تحديث الـ Service Worker لو فيه نسخة جديدة
-              reg.update(); 
-              
-              // لو المستخدم مدي إذن الإشعارات، شغل المنبهات فوراً
-              if (Notification.permission === 'granted') {
-                  startHourlyNotifications(); // أذكار كل ساعة
-                  scheduleDailyNotifications(); // أذكار الصباح والمساء
-              }
-          }).catch(err => {
-              console.error('فشل تسجيل الـ Service Worker:', err);
-          });
-      }
-  };
+    if (typeof setDailyAyah === "function") setDailyAyah(); 
+
+    if ('serviceWorker' in navigator) { 
+        // التحديث لـ v8
+        navigator.serviceWorker.register('sw.js?v=8').then(reg => {
+            console.log('تم تسجيل الـ Service Worker بنجاح ✅');
+            
+            // تحديث الـ Service Worker لو فيه نسخة جديدة
+            reg.update(); 
+
+            // تشغيل الإشعارات لو مسموح بها
+            if (Notification.permission === 'granted') {
+                if (typeof startHourlyNotifications === "function") startHourlyNotifications();
+                if (typeof scheduleDailyNotifications === "function") scheduleDailyNotifications();
+            }
+        }).catch(err => {
+            console.error('فشل تسجيل الـ Service Worker:', err);
+        });
+    }
+};
     </script>
 </body>
 </html>
