@@ -212,18 +212,27 @@
             starContainer.appendChild(star);
         }
 
-        window.onload = () => {
-            setDailyAyah();
-            if ('serviceWorker' in navigator) { 
-                navigator.serviceWorker.register('sw.js?v=12').then(reg => {
-                    reg.update(); 
-                    if (Notification.permission === 'granted') {
-                        startHourlyNotifications();
-                        scheduleDailyNotifications();
-                    }
-                });
-            }
-        };
+      window.onload = () => {
+      setDailyAyah(); // تشغيل آية اليوم
+      
+      if ('serviceWorker' in navigator) { 
+          // غيرنا v=12 لـ v=5 عشان تتماشى مع ملف sw.js الجديد
+          navigator.serviceWorker.register('sw.js?v=5').then(reg => {
+              console.log('تم تسجيل الـ Service Worker بنجاح ✅');
+              
+              // تحديث الـ Service Worker لو فيه نسخة جديدة
+              reg.update(); 
+              
+              // لو المستخدم مدي إذن الإشعارات، شغل المنبهات فوراً
+              if (Notification.permission === 'granted') {
+                  startHourlyNotifications(); // أذكار كل ساعة
+                  scheduleDailyNotifications(); // أذكار الصباح والمساء
+              }
+          }).catch(err => {
+              console.error('فشل تسجيل الـ Service Worker:', err);
+          });
+      }
+  };
     </script>
 </body>
 </html>
