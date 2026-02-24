@@ -1,4 +1,4 @@
-const CACHE_NAME = 'adhkar-v5'; // تحديث الإصدار لـ v5 لضمان مسح القديم
+const CACHE_NAME = 'adhkar-v6'; // غيرنا من 5 لـ 6
 
 // القائمة الكاملة للملفات - تأكد من صحة الأسماء 100%
 const assets = [
